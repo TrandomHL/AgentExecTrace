@@ -42,17 +42,18 @@ that a given vendor will adopt or endorse this tool.
 
 | Requirement | Implementation | Test | Status | Evidence |
 |---|---|---|---|---|
-| FR-01 | Versioned `model.Snapshot`; no environment dump | `TestSnapshotDoesNotDumpEnvironmentValues` | PASS (local) | `go test ./...` 2026-08-20 |
-| FR-02 | `pathinfo.Classify` | `TestClassify` | PASS (local) | `go test ./...` 2026-08-20 |
-| FR-03 | PATH/PATHEXT resolver, Windows case handling and provenance | `internal/resolve` tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-04 | Bounded custom probe and same-binary self-probe | `TestProbeCommandCapturesResult`, `TestProbeWithoutArgumentsRunsSelfProbe` | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-05 | Explicit snapshot/PATH/PATHEXT/resolve/probe comparisons | `internal/diff` semantic and golden tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-06 | Structured JSON/text report redaction, summaries and home paths | `internal/redact` and report tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS (local); CI pending | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
+| FR-01 | Versioned `model.Snapshot`; no environment dump | `TestSnapshotDoesNotDumpEnvironmentValues` | PASS | local gate and GitHub CI run `32364080361` |
+| FR-02 | `pathinfo.Classify` | `TestClassify` | PASS | local gate and GitHub CI run `32364080361` |
+| FR-03 | PATH/PATHEXT resolver, Windows case handling and provenance | `internal/resolve` tests | PASS | local gate and GitHub CI run `32364080361` |
+| FR-04 | Bounded custom probe and same-binary self-probe | `TestProbeCommandCapturesResult`, `TestProbeWithoutArgumentsRunsSelfProbe` | PASS | local gate and GitHub CI run `32364080361` |
+| FR-05 | Explicit snapshot/PATH/PATHEXT/resolve/probe comparisons | `internal/diff` semantic and golden tests | PASS | local gate and GitHub CI run `32364080361` |
+| FR-06 | Structured JSON/text report redaction, summaries and home paths | `internal/redact` and report tests | PASS | local gate and GitHub CI run `32364080361` |
+| FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
 
-Remote Windows/Linux CI and the controlled Phase 5 WSL gate remain **NOT RUN**
-until this unpushed change set is validated there. They must not be inferred
-from CI for an earlier commit.
+Windows and Ubuntu CI passed for the Phase 5.1 implementation commit in
+GitHub Actions run `32364080361`. Controlled Ubuntu WSL validation also passed
+all five public commands. Any later commit must obtain its own validation
+evidence before independent review.
 
 ## Out of scope
 

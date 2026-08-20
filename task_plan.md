@@ -69,11 +69,11 @@ auto-fix, plugin, installer, or ARM release matrix.
 
 ### Release gate
 
-- [ ] Windows and Linux CI configured and passing.
-- [ ] WSL validation recorded (CI or controlled manual run).
-- [ ] README, CHANGELOG, CONTRIBUTING and issue templates present.
-- [ ] Release workflow builds archives and checksums.
-- [ ] `git status --short` is empty after the phase commit.
+- [x] Windows and Linux CI configured and passing.
+- [x] WSL validation recorded (controlled Ubuntu manual gate).
+- [x] README, CHANGELOG, CONTRIBUTING and issue templates present.
+- [x] Release workflow builds archives and checksums.
+- [ ] `git status --short` is empty after the final evidence commit.
 
 ### Phase 5 conformance gate
 
@@ -85,10 +85,10 @@ auto-fix, plugin, installer, or ARM release matrix.
 - [x] `report --redact` produces a schema-aware, Issue-ready report with secret
   and home-profile redaction summaries.
 - [x] Resolver reports minimal provenance and applies POSIX executable checks.
-- [ ] Requirements compliance matrix has execution evidence for FR-01 through
+- [x] Requirements compliance matrix has execution evidence for FR-01 through
   FR-07; CI enforces gofmt, vet, test and build on Windows and Ubuntu.
-- [ ] README, CHANGELOG and test plan match verified behavior; controlled WSL
-  validation is recorded; worktree is clean after the phase commit.
+- [x] README, CHANGELOG and test plan match verified behavior; controlled WSL
+  validation is recorded.
 
 ## Phases
 
@@ -140,7 +140,19 @@ auto-fix, plugin, installer, or ARM release matrix.
   speculative alias, reparse-point or shell discovery logic.
 - Add test fixtures before or with each behavior, align docs and CI, execute
   local/controlled WSL gates, and record only actual evidence.
-- **Status:** in progress
+- **Status:** complete; superseded by Phase 5.1 independent release-gate closure.
+
+### Phase 5.1: v0.1 Release Gate Closure
+
+- [x] Redact bare credential fields and corresponding structured/text cases.
+- [x] Keep POSIX no-extension provenance as `unknown`.
+- [x] Report same-target resolver provenance changes semantically.
+- [x] Require all release assets through multiline action globs.
+- [x] Pass local gofmt, vet, test and build, GitHub Windows/Ubuntu CI, and
+  controlled Ubuntu WSL validation for the implementation commit.
+- [ ] Complete independent v0.1 Release Gate review; do not create tag/release
+  in this phase.
+- **Status:** implementation and evidence complete; awaiting independent review.
 
 ## Phase 5 implementation plan (Superpowers)
 

@@ -1,6 +1,6 @@
 # AgentExecTrace Product Specification
 
-**Status:** Phase 5.1 — v0.1 Release Gate Closure (scope frozen)
+**Status:** Phase 5.1 — v0.1 Release Gate Closure (evidence recorded; awaiting independent review)
 **Target:** Windows 11 + WSL2
 **Implementation:** Go, single executable, standard library first
 **Audience:** developers and maintainers diagnosing AI coding-agent command

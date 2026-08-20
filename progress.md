@@ -129,3 +129,16 @@
   the same SHA. Persisted the Superpowers delivery plan after a Ponytail scope
   review: small name-based redaction, no executable-format inspection, no
   generic scanner or rules engine.
+- Added and passed adversarial regression tests for nested bare credential
+  fields, captured stdout text, URL credentials, existing home paths and PEM
+  handling. Corrected POSIX no-extension provenance and resolver provenance
+  diffing; corrected release asset matching.
+- Committed implementation as `4d728149515d397d0305bb19b7fa4b68a91360cf` and
+  passed local gofmt, `go vet ./...`, `go test ./...`, and `go build ./...`.
+- Controlled Ubuntu WSL validation used a temporary Linux binary and passed
+  `snapshot`, `resolve`, `probe`, `diff`, and `report --redact`; snapshot
+  reported `linux/amd64`, `is_wsl=true`, and `wsl-mount`.
+- Because CI only triggers on `main` pushes or PRs, created draft PR #1 solely
+  to run existing CI. GitHub Actions run `32364080361` passed both
+  `ubuntu-latest` and `windows-latest` jobs (gofmt, vet, test, build). No tag
+  or GitHub Release was created.

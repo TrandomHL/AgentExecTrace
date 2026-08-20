@@ -107,3 +107,7 @@ changed, or incompatible clause and its reason in `MIGRATION_NOTES.md`.
   asset failure gate.
 - The policy source `E:\project_AD9361` is on dirty `master` and is read-only
   for this task. Its migrated general policy is already present in the target.
+- Implementation commit `4d728149515d397d0305bb19b7fa4b68a91360cf` passed
+  local gofmt/vet/test/build, controlled Ubuntu WSL validation of all five
+  commands, and GitHub Actions run `32364080361` on both `ubuntu-latest` and
+  `windows-latest`. The CI workflow checked gofmt, vet, test, and build.
