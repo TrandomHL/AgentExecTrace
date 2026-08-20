@@ -1,0 +1,5 @@
+# Local build artifacts and tool caches
+/.tools/
+/dist/
+*.exe
+coverage.out

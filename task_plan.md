@@ -18,12 +18,12 @@ WSL2, without changing the user's machine or configuration.
 
 ## Current phase
 
-Phase 2 — test-first foundation (in progress).
+Phase 4 — verification and release readiness (complete locally).
 
 ## Next step
 
-Create deterministic Go test fixtures and failing tests for the frozen v0.1
-behaviors before adding command implementation.
+Publish the repository and let configured GitHub Actions establish the remaining
+remote CI/release evidence; no remote publication is authorized in this task.
 
 ## Gates
 
@@ -39,8 +39,8 @@ behaviors before adding command implementation.
 ### Implementation gate
 
 - [x] Documentation gate passed.
-- [ ] Go module, test skeleton and deterministic fixtures exist before command code.
-- [ ] Unit and integration tests pass on the host platform.
+- [x] Go module, test skeleton and deterministic fixtures exist before command code.
+- [x] Unit and integration tests pass on the host platform.
 
 ### Release gate
 
@@ -71,22 +71,22 @@ behaviors before adding command implementation.
 
 ### Phase 2: Test-first foundation
 
-- [ ] Create Go module, test harness and checked-in fixtures.
-- [ ] Add redaction, path and process-result unit tests before command implementation.
-- **Status:** in_progress
+- [x] Create Go module, test harness and checked-in fixtures.
+- [x] Add redaction, path and process-result unit tests before command implementation.
+- **Status:** complete
 
 ### Phase 3: v0.1 implementation
 
-- [ ] Implement `snapshot`, `resolve`, `probe`, `diff`, and `report --redact`.
-- [ ] Update evidence-to-requirement map and user documentation as each command lands.
-- **Status:** pending
+- [x] Implement `snapshot`, `resolve`, `probe`, `diff`, and `report --redact`.
+- [x] Update evidence-to-requirement map and user documentation as each command lands.
+- **Status:** complete
 
 ### Phase 4: Verification and release readiness
 
-- [ ] Complete unit, integration, Windows, Linux and WSL gates.
-- [ ] Add release automation, repository contribution files and troubleshooting examples.
-- [ ] Commit each coherent completed phase; leave the worktree clean.
-- **Status:** pending
+- [x] Complete unit/integration tests, Windows build, Linux cross-build and controlled WSL gate.
+- [x] Add release automation, repository contribution files and troubleshooting examples.
+- [x] Commit the verified implementation; leave the worktree clean.
+- **Status:** complete locally; remote CI is pending repository publication.
 
 ## Decisions
 
@@ -97,6 +97,7 @@ behaviors before adding command implementation.
 | JSON snapshots and reports | Portable, inspectable, diffable, and supported by Go stdlib. |
 | Opt-in environment collection | Privacy by default; default output never dumps all environment variables. |
 | No source-file substitutes | The requested inherited policies cannot be faithfully preserved while their source directory is absent. |
+| MIT license | A permissive target was allowed by the original Phase 0 draft; MIT is the simplest v0.1 choice. |
 
 ## Errors and constraints
 
@@ -106,3 +107,6 @@ behaviors before adding command implementation.
 | `E:\project\_AD9361` absent | 1 | Defer migration; record the exact paths and do not fabricate policy content. |
 | Go unavailable on PATH | 1 | Inspect local standard installation locations; request permission only if installation is required. |
 | Local Go-location check had an invalid PowerShell pipeline | 1 | Retry with a grouped `foreach` expression; no system or repository state changed. |
+| Go installer completed download output but no `go.exe` existed at the standard install path | 1 | Verify package-manager installation state and standard locations before choosing a different installer path. |
+| GitHub template/workflow parent directories did not yet exist | 1 | Created only the required empty parent directories, then added repository metadata. |
+| GitHub template/workflow parent directories did not yet exist | 1 | Create empty `.github` parent directories, then apply repository metadata files. |

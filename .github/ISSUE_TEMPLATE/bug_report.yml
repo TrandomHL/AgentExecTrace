@@ -1,0 +1,20 @@
+name: Bug report
+description: Report a safe, reproducible AgentExecTrace problem
+body:
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: Do not include credentials, raw environment dumps or unredacted reports.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Safe reproduction
+      description: Include command, OS/WSL context and redacted output only.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: AgentExecTrace version
+    validations:
+      required: true

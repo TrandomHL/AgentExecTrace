@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "cwd": "/home/agent/repo",
+  "path_namespace": "posix",
+  "path": ["/usr/local/bin", "/usr/bin"],
+  "path_ext": []
+}

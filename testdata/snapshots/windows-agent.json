@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "cwd": "C:\\",
+  "path_namespace": "windows-drive",
+  "path": ["C:\\Windows\\System32"],
+  "path_ext": [".COM", ".EXE", ".BAT", ".CMD"]
+}

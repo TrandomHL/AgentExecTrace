@@ -1,0 +1,15 @@
+name: Feature request
+description: Propose an evidence-backed diagnostic improvement
+body:
+  - type: textarea
+    attributes:
+      label: Problem and public evidence
+      description: Link a real public issue or a safely redacted reproduction.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed diagnostic behavior
+      description: Explain why it fits the v0.1 privacy and non-mutation boundaries.
+    validations:
+      required: true
