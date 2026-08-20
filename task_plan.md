@@ -73,7 +73,7 @@ auto-fix, plugin, installer, or ARM release matrix.
 - [x] WSL validation recorded (controlled Ubuntu manual gate).
 - [x] README, CHANGELOG, CONTRIBUTING and issue templates present.
 - [x] Release workflow builds archives and checksums.
-- [ ] `git status --short` is empty after the final evidence commit.
+- [x] `git status --short` is empty after the final evidence commit.
 
 ### Phase 5 conformance gate
 

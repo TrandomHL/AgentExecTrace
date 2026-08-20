@@ -51,8 +51,9 @@ that a given vendor will adopt or endorse this tool.
 | FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
 
 Windows and Ubuntu CI passed for the Phase 5.1 implementation commit in
-GitHub Actions run `32364080361`. Controlled Ubuntu WSL validation also passed
-all five public commands. Any later commit must obtain its own validation
+GitHub Actions run `32364080361`; the final evidence commit also passed in run
+`32364353630`. Controlled Ubuntu WSL validation passed all five public
+commands. Any later behavior-changing commit must obtain its own validation
 evidence before independent review.
 
 ## Out of scope

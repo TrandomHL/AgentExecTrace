@@ -142,3 +142,5 @@
   to run existing CI. GitHub Actions run `32364080361` passed both
   `ubuntu-latest` and `windows-latest` jobs (gofmt, vet, test, build). No tag
   or GitHub Release was created.
+- Final evidence commit `58117f7c35915cfb08ff6ae89b4a68de219285ca` also passed
+  the same Windows/Ubuntu CI matrix in GitHub Actions run `32364353630`.
