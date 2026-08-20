@@ -25,5 +25,9 @@ and Semantic Versioning.
 - POSIX execute permission remains the selection check, but a no-extension
   candidate now reports provenance as `unknown`; `diff` reports a provenance
   change when the selected executable remains the same.
+- Resolver candidates now report existence separately from executability, so a
+  non-executable POSIX file is not reported as absent.
+- The `go install` instructions pin the intended v0.1.0 source version and
+  distinguish source-build from release-workflow provenance.
 - Release assets use a multiline file list and fail when an expected file is
   absent.

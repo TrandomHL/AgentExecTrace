@@ -21,18 +21,21 @@ dependency.
 
 ## Install
 
-After a release is published, install the real module directly:
+After v0.1 is published, install its tagged source:
 
 ```powershell
-go install github.com/TrandomHL/AgentExecTrace@latest
+go install github.com/TrandomHL/AgentExecTrace@v0.1.0
 ```
+
+`go install` builds from source and identifies itself as `0.1.0`; use a release
+asset when you need the release-workflow build provenance.
 
 ## Commands
 
 | Command | Purpose |
 |---|---|
 | `snapshot [--output file]` | Emit OS/WSL evidence, CWD, path namespace, PATH and PATHEXT metadata. It never dumps environment values. |
-| `resolve [--output file] <name>` | Explain executable candidates in PATH/PATHEXT order, including lightweight provenance. |
+| `resolve [--output file] <name>` | Explain candidate existence and executability in PATH/PATHEXT order, including lightweight provenance. |
 | `probe [--max-bytes n] [--output file] [-- <command> [args...]]` | With no command, run a deterministic same-binary self-probe; otherwise capture the supplied argv, bounded stdout/stderr, UTF-8 status and exit result. |
 | `diff [--output file] <left.json> <right.json>` | Compare snapshot, resolve, or probe JSON with explicit semantic findings and priorities. |
 | `report --redact [--output file] <input>` | Produce an Issue-ready Markdown report with secret and home-path redaction summary. |

@@ -34,7 +34,7 @@ that a given vendor will adopt or endorse this tool.
 |---|---|
 | NFR-01 | Build as one Go executable with no Node/Python runtime, service, database or required network access. |
 | NFR-02 | Prefer Go standard library; any dependency needs a documented v0.1 necessity review. |
-| NFR-03 | Outputs are deterministic where machine state permits and include schema/tool versions. |
+| NFR-03 | Outputs are deterministic where machine state permits and include schema/tool versions. Source installs for v0.1 report `0.1.0`; release assets inject the release tag. |
 | NFR-04 | Capture sizes are bounded and truncation is explicit. |
 | NFR-05 | Linux CI checks portable behavior; Windows CI checks Windows semantics; WSL is validated in controlled CI or a recorded manual gate. |
 

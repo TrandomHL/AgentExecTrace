@@ -1,6 +1,6 @@
 # AgentExecTrace Product Specification
 
-**Status:** Phase 5.1 — v0.1 Release Gate Closure (evidence recorded; awaiting independent review)
+**Status:** Phase 5.1 — v0.1 Release Gate Closure (final correction pending CI and independent delta audit)
 **Target:** Windows 11 + WSL2
 **Implementation:** Go, single executable, standard library first
 **Audience:** developers and maintainers diagnosing AI coding-agent command
@@ -35,7 +35,8 @@ that a user can attach to an issue or use to reproduce a mismatch.
 - shell/process identity where discoverable without extra dependencies.
 - PATH segment metadata and PATHEXT values, without copying all environment
   variables by default.
-- executable candidates, selected path and reason for selection.
+- executable candidates, including separate existence and executability facts,
+  selected path and reason for selection.
 - probe argv, captured output bytes/UTF-8 validity, truncation state and exit
   result.
 

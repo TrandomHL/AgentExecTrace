@@ -9,9 +9,8 @@ of these implementation phases does not itself satisfy a release gate.
 
 ## Phase 5.1 — v0.1 Release Gate Closure (current)
 
-- Close only the independently identified blockers: bare-field/text redaction,
-  uncertain POSIX provenance, same-target provenance diffing, and release
-  asset validation.
+- Close only the independently identified blockers: POSIX candidate existence
+  versus executability facts and `go install` version evidence.
 - Add focused adversarial regression tests; do not add a secret scanner,
   executable-format detector, shell emulator, rules engine, sixth command, or
   new platform/release matrix.

@@ -27,7 +27,7 @@ func TestSnapshotDoesNotDumpEnvironmentValues(t *testing.T) {
 		t.Fatalf("snapshot disclosed environment value: %s", out.String())
 	}
 	var snapshot model.Snapshot
-	if err := json.Unmarshal(out.Bytes(), &snapshot); err != nil || snapshot.SchemaVersion != 1 {
+	if err := json.Unmarshal(out.Bytes(), &snapshot); err != nil || snapshot.SchemaVersion != 1 || snapshot.ToolVersion != "0.1.0" {
 		t.Fatalf("invalid snapshot: %v %#v", err, snapshot)
 	}
 }

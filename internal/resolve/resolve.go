@@ -17,6 +17,7 @@ const MaxCandidates = 128
 type Candidate struct {
 	Path       string `json:"path"`
 	Exists     bool   `json:"exists"`
+	Executable bool   `json:"executable"`
 	Provenance string `json:"provenance,omitempty"`
 }
 
@@ -40,19 +41,19 @@ func Resolve(name string, dirs, extensions []string, platform Platform) Result {
 			if extension != "" && !strings.HasSuffix(strings.ToLower(name), strings.ToLower(extension)) {
 				candidate += extension
 			}
-			exists, provenance := candidateInfo(candidate, platform)
+			exists, executable, provenance := candidateInfo(candidate, platform)
 			if len(result.Candidates) < MaxCandidates {
-				result.Candidates = append(result.Candidates, Candidate{Path: candidate, Exists: exists, Provenance: provenance})
+				result.Candidates = append(result.Candidates, Candidate{Path: candidate, Exists: exists, Executable: executable, Provenance: provenance})
 			} else {
 				result.Truncated = true
 			}
-			if exists && result.Selected == "" {
+			if executable && result.Selected == "" {
 				result.Selected = candidate
 			}
 		}
 	}
 	if result.Selected == "" {
-		result.Reason = "no candidate exists"
+		result.Reason = "no executable candidate exists"
 	} else {
 		result.Reason = "first existing candidate in PATH/PATHEXT order"
 	}
@@ -62,35 +63,32 @@ func Resolve(name string, dirs, extensions []string, platform Platform) Result {
 	return result
 }
 
-func candidateInfo(path string, platform Platform) (bool, string) {
+func candidateInfo(path string, platform Platform) (bool, bool, string) {
 	info, err := os.Stat(path)
 	if err == nil {
-		return usable(info, path, platform)
+		return true, executable(info, platform), provenance(path)
 	}
 	if platform != Windows {
-		return false, ""
+		return false, false, ""
 	}
 	entries, err := os.ReadDir(filepath.Dir(path))
 	if err != nil {
-		return false, ""
+		return false, false, ""
 	}
 	for _, entry := range entries {
 		if strings.EqualFold(entry.Name(), filepath.Base(path)) {
 			info, err := os.Stat(filepath.Join(filepath.Dir(path), entry.Name()))
 			if err != nil {
-				return false, ""
+				return false, false, ""
 			}
-			return usable(info, filepath.Join(filepath.Dir(path), entry.Name()), platform)
+			return true, executable(info, platform), provenance(filepath.Join(filepath.Dir(path), entry.Name()))
 		}
 	}
-	return false, ""
+	return false, false, ""
 }
 
-func usable(info os.FileInfo, path string, platform Platform) (bool, string) {
-	if info.IsDir() || (platform != Windows && info.Mode().Perm()&0o111 == 0) {
-		return false, ""
-	}
-	return true, provenance(path)
+func executable(info os.FileInfo, platform Platform) bool {
+	return !info.IsDir() && (platform == Windows || info.Mode().Perm()&0o111 != 0)
 }
 
 func provenance(path string) string {

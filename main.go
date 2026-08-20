@@ -17,7 +17,7 @@ import (
 	"github.com/TrandomHL/AgentExecTrace/internal/resolve"
 )
 
-var version = "0.1.0-dev"
+var version = "0.1.0"
 
 const selfProbeFlag = "--agentexectrace-self-probe"
 
