@@ -4,24 +4,24 @@
 
 | Source | Target | Status |
 |---|---|---|
-| `E:\project\_AD9361\AGENTS.md` | `E:\project_Open\AGENTS.md` | Deferred: source path absent on 2026-08-20 |
-| `E:\project\_AD9361\.codex\config.toml` | `E:\project_Open\.codex\config.toml` | Deferred: source path absent on 2026-08-20 |
+| `E:\project_AD9361\AGENTS.md` | `E:\project_Open\AGENTS.md` | Migrated on 2026-08-20 |
+| `E:\project_AD9361\.codex\config.toml` | `E:\project_Open\.codex\config.toml` | Migrated on 2026-08-20 |
 
-## Reason for no target files
+## Superseded initial lookup
 
-The request requires retaining every general rule from the source. The source
-directory and both requested files were absent when checked. Creating a guessed
-`AGENTS.md` or `config.toml` would falsely claim that general clauses were
-preserved and could silently weaken a user policy. Therefore no replacement,
-truncated copy, or project-local approximation has been created.
+The initially supplied source path used `E:\project\_AD9361`, which was absent.
+No replacement was created. The user corrected it to `E:\project_AD9361`, where
+both files existed and were read before this migration.
 
-## Safe migration procedure once source is available
+## Migration changes and rationale
 
-1. Copy each source file without deleting or rewording any general clause.
-2. Compare source and target; retain source order unless a syntax constraint
-   requires a documented relocation.
-3. Append only these AgentExecTrace-specific constraints: Go-only v0.1,
-   standard-library-first, read-only diagnostics, privacy-by-default, no secret
-   output, and no machine/configuration mutation.
-4. Update this record with a line-by-line change summary and rationale.
-5. Validate TOML syntax and inspect `git diff`; commit the migration separately.
+1. Retained the source's technical-lead role, evidence-before-review rule,
+   Terra/Sol escalation discipline, bounded review policy and worktree hygiene.
+2. Replaced FPGA/RTL/RF/hardware-specific risk language with the equivalent
+   AgentExecTrace risks: privacy, secret exposure, mutation safety, CLI/data
+   compatibility and Windows/WSL behavior.
+3. Adapted the authoritative-document order to existing AgentExecTrace files.
+4. Preserved the source TOML model, reasoning-effort and review-model defaults;
+   only the project header and path provenance changed.
+5. Recorded the user-authorized initial bootstrap exception to the source's
+   normal linked-worktree rule; future concurrent/risky work follows it.

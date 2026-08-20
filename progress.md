@@ -10,6 +10,8 @@
   - Initialized Git repository on `main` without replacing any existing files.
   - Checked the requested source directory and source policy files; all were absent.
   - Created persistent planning records before product code.
+  - After source-path correction, migrated `E:\project_AD9361\AGENTS.md` and
+    `.codex\config.toml` with documented AgentExecTrace-specific adaptations.
 - **Files created:**
   - `task_plan.md`
   - `findings.md`

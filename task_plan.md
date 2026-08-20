@@ -57,7 +57,7 @@ remote CI/release evidence; no remote publication is authorized in this task.
 - [x] Inspect `E:\project_Open` before writing.
 - [x] Initialize only because the directory was empty.
 - [x] Inspect the requested migration source.
-- [ ] Copy `AGENTS.md` and `.codex/config.toml` verbatim-plus-minimal-project-additions when the source becomes available.
+- [x] Migrate `AGENTS.md` and `.codex/config.toml` from corrected source with documented project adaptations.
 - [x] Record the current source-unavailable constraint.
 - **Status:** complete with a deferred migration dependency.
 
@@ -96,7 +96,7 @@ remote CI/release evidence; no remote publication is authorized in this task.
 | Go standard library only for v0.1 | Meets no-network/no-runtime goal and avoids supply-chain and maintenance cost. |
 | JSON snapshots and reports | Portable, inspectable, diffable, and supported by Go stdlib. |
 | Opt-in environment collection | Privacy by default; default output never dumps all environment variables. |
-| No source-file substitutes | The requested inherited policies cannot be faithfully preserved while their source directory is absent. |
+| No source-file substitutes | No substitute was created while the initial path was absent; corrected-source migration is now complete and documented. |
 | MIT license | A permissive target was allowed by the original Phase 0 draft; MIT is the simplest v0.1 choice. |
 
 ## Errors and constraints
