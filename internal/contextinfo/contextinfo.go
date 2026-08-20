@@ -5,8 +5,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/agentexectrace/agentexectrace/internal/model"
-	"github.com/agentexectrace/agentexectrace/internal/pathinfo"
+	"github.com/TrandomHL/AgentExecTrace/internal/model"
+	"github.com/TrandomHL/AgentExecTrace/internal/pathinfo"
 )
 
 func Snapshot(version string) (model.Snapshot, error) {

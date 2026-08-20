@@ -3,6 +3,7 @@ package resolve
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -55,5 +56,27 @@ func TestResolveCapsReportedCandidatesButKeepsScanning(t *testing.T) {
 	result := Resolve("missing", make([]string, MaxCandidates+1), []string{".EXE"}, Windows)
 	if len(result.Candidates) != MaxCandidates || !result.Truncated {
 		t.Fatalf("candidate cap not reported: %#v", result)
+	}
+}
+
+func TestResolvePOSIXRequiresExecutableFileAndClassifiesProvenance(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows does not provide POSIX executable permissions")
+	}
+	dir := t.TempDir()
+	notExecutable := filepath.Join(dir, "tool")
+	if err := os.WriteFile(notExecutable, []byte("fixture"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	result := Resolve("tool", []string{dir}, nil, Platform("posix"))
+	if result.Selected != "" || result.Candidates[0].Exists {
+		t.Fatalf("non-executable file selected: %#v", result)
+	}
+	if err := os.Chmod(notExecutable, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	result = Resolve("tool", []string{dir}, nil, Platform("posix"))
+	if result.Selected == "" || result.Candidates[0].Provenance != "native executable" {
+		t.Fatalf("executable provenance missing: %#v", result)
 	}
 }

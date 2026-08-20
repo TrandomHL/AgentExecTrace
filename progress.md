@@ -87,3 +87,29 @@
 | What's the goal? | Privacy-first Windows/WSL execution-context diagnostic CLI. |
 | What have I learned? | See `findings.md`. |
 | What have I done? | See this file and `task_plan.md`. |
+
+## Session: 2026-08-20 — Phase 5 conformance closure
+
+- **Status:** local implementation and validation complete; remote CI is not run for the unpushed change set.
+- Re-read the repository policy/configuration, all required planning and
+  product documents, current CI/release workflows, branch/remote state and
+  relevant source references.
+- Confirmed a clean `main` at `b4c13f0`, identical to `origin/main`; GitHub CI
+  run `32346400206` is successful.
+- Persisted the Superpowers delivery sequence and Ponytail scope review before
+  any product-code change. The phase retains exactly five public commands and
+  standard-library-only implementation.
+- Implemented the real module identity, explicit semantic evidence comparisons,
+  deterministic same-binary self-probe, Markdown redacted reports, basic
+  resolver provenance, POSIX execute checks, CI gofmt/vet gates and synced docs.
+- Windows validation passed gofmt, vet, test, build, module identity and five
+  CLI command runs. Controlled WSL validation passed all five commands with a
+  temporary cross-built Linux binary; Ubuntu lacks Go, so Linux source vet/test
+  remains not run outside future CI.
+- Terra review found a structured-report leak for `Authorization` and `*_KEY`
+  fields. Added a regression test and fixed both structured-key and text-key
+  redaction; vet, test, build and diff checks pass afterward.
+- Attempted the required Ubuntu WSL source validation. It did not start because
+  that distro has neither `go` nor `gofmt`; no WSL configuration was changed.
+  The next attempt will cross-build the current source on Windows and execute
+  the temporary Linux binary in the existing WSL environment.

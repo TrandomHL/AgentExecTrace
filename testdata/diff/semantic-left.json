@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "platform": {"os": "windows", "arch": "amd64", "is_wsl": false},
+  "cwd": "C:\\repo",
+  "path_namespace": "windows-drive",
+  "path": ["a", "b", "c"],
+  "path_ext": [".EXE"]
+}

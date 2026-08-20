@@ -57,3 +57,29 @@ No migration has been performed. When `E:\project\_AD9361` is supplied or
 becomes available, copy `AGENTS.md` and `.codex\config.toml` first, retain all
 general clauses, then append only project-specific clauses. Record every added,
 changed, or incompatible clause and its reason in `MIGRATION_NOTES.md`.
+
+## Phase 5 baseline — 2026-08-20
+
+- The only working repository is `E:\project_Open`. `E:\project\_Open` is a
+  prior empty typo-path repository and must remain untouched. The policy source
+  is `E:\project_AD9361`; its migrated policy/configuration is already present
+  in the working repository.
+- Local `main` and `origin/main` both point to `b4c13f0`; GitHub Actions run
+  `32346400206` completed successfully for that commit on Windows and Ubuntu.
+- Current source does not yet conform to Phase 5: `go.mod` uses the old module
+  identity; `diff` uses raw `reflect.DeepEqual`; `probe` rejects no arguments;
+  `report --redact` is text-only; resolver lacks provenance and POSIX execute
+  checks; CI lacks gofmt/vet; no FR-01…FR-07 evidence matrix exists.
+- The existing release workflow creates archives/checksums on tag pushes. No
+  tag, GitHub Release, issue, PR or further remote write is authorized by
+  Phase 5.
+
+### Phase 5 validation evidence
+
+- Windows local validation passed gofmt, vet, test, build and all five CLI
+  commands. `go list -m` reports `github.com/TrandomHL/AgentExecTrace`, used as
+  the local module-identity equivalent to a tagged `go install` validation.
+- Ubuntu WSL has no Go toolchain, so it cannot supply Linux test/vet evidence.
+  A Windows cross-built Linux amd64 binary ran all five commands in that WSL and
+  reported `os=linux`, `is_wsl=true`, CWD `/mnt/e/project_Open`, and namespace
+  `wsl-mount`. The temporary binary was removed after the run.

@@ -18,12 +18,13 @@ WSL2, without changing the user's machine or configuration.
 
 ## Current phase
 
-Phase 4 — verification and release readiness (complete locally).
+Phase 5 — v0.1 conformance closure (local implementation and validation complete; remote CI pending).
 
 ## Next step
 
-Publish the repository and let configured GitHub Actions establish the remaining
-remote CI/release evidence; no remote publication is authorized in this task.
+Close the explicitly identified v0.1 conformance gaps without expanding the
+five-command public surface. Remote publication and release tagging are not
+authorized by this phase.
 
 ## Gates
 
@@ -49,6 +50,21 @@ remote CI/release evidence; no remote publication is authorized in this task.
 - [ ] README, CHANGELOG, CONTRIBUTING and issue templates present.
 - [ ] Release workflow builds archives and checksums.
 - [ ] `git status --short` is empty after the phase commit.
+
+### Phase 5 conformance gate
+
+- [x] Real GitHub module identity and all internal imports are aligned.
+- [x] FR-05 semantic diff has explicit, golden-backed findings for namespace,
+  CWD, PATH/PATHEXT, resolver and applicable probe evidence.
+- [x] `probe` has a deterministic no-argument self-probe and retains custom
+  command probing.
+- [x] `report --redact` produces a schema-aware, Issue-ready report with secret
+  and home-profile redaction summaries.
+- [x] Resolver reports minimal provenance and applies POSIX executable checks.
+- [ ] Requirements compliance matrix has execution evidence for FR-01 through
+  FR-07; CI enforces gofmt, vet, test and build on Windows and Ubuntu.
+- [ ] README, CHANGELOG and test plan match verified behavior; controlled WSL
+  validation is recorded; worktree is clean after the phase commit.
 
 ## Phases
 
@@ -87,6 +103,40 @@ remote CI/release evidence; no remote publication is authorized in this task.
 - [x] Add release automation, repository contribution files and troubleshooting examples.
 - [x] Commit the verified implementation; leave the worktree clean.
 - **Status:** complete locally; remote CI is pending repository publication.
+
+### Phase 5: v0.1 conformance closure
+
+- Correct the module identity, then replace raw-field diffing with the small,
+  explicit comparisons required by FR-05.
+- Add a hidden same-binary probe helper so no-argument `probe` is deterministic
+  on Windows and WSL while preserving `probe -- <command> [args...]`.
+- Make redacted reports schema-aware and Markdown-friendly; add only the
+  redactions and summary needed for safe issue sharing.
+- Add reliable resolver provenance and POSIX execute-permission behavior; avoid
+  speculative alias, reparse-point or shell discovery logic.
+- Add test fixtures before or with each behavior, align docs and CI, execute
+  local/controlled WSL gates, and record only actual evidence.
+- **Status:** in progress
+
+## Phase 5 implementation plan (Superpowers)
+
+1. Freeze the five public commands and record the baseline/remote CI evidence.
+2. Change module identity and imports, then validate the module builds locally.
+3. Extend the existing data model only where snapshot/report evidence requires
+   it; implement explicit semantic diff comparisons rather than a rule engine.
+4. Implement self-probe through a hidden helper mode and test process facts.
+5. Add structured redacted-report rendering, lightweight provenance, and POSIX
+   executable checks with deterministic fixtures.
+6. Bring documentation, compliance evidence and CI checks into line, then run
+   all prescribed local and controlled platform validation before review.
+
+## Phase 5 Ponytail review
+
+- Keep the existing single binary, package layout and standard library.
+- Do not add a sixth command, helper executable, shell dependency, generic rule
+  engine, plugin system, high-entropy scanner, alias parser or WSL CI service.
+- Prefer small comparison/rendering functions and checked-in fixtures; retain
+  uncertain provenance as `unknown`.
 
 ## Decisions
 

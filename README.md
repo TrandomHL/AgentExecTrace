@@ -19,15 +19,45 @@ go build -o agentexectrace.exe .
 The executable has no Node, Python, service, database or network runtime
 dependency.
 
+## Install
+
+After a release is published, install the real module directly:
+
+```powershell
+go install github.com/TrandomHL/AgentExecTrace@latest
+```
+
 ## Commands
 
 | Command | Purpose |
 |---|---|
 | `snapshot [--output file]` | Emit OS/WSL evidence, CWD, path namespace, PATH and PATHEXT metadata. It never dumps environment values. |
-| `resolve [--output file] <name>` | Explain executable candidates in PATH/PATHEXT order. Candidate output is bounded and marked when truncated. |
-| `probe [--max-bytes n] [--output file] -- <command> [args...]` | Capture argv, bounded stdout/stderr, UTF-8 status and exit result. |
-| `diff [--output file] <left.json> <right.json>` | Compare two snapshots semantically. |
-| `report --redact [--output file] <input>` | Write or print a new redacted report. |
+| `resolve [--output file] <name>` | Explain executable candidates in PATH/PATHEXT order, including lightweight provenance. |
+| `probe [--max-bytes n] [--output file] [-- <command> [args...]]` | With no command, run a deterministic same-binary self-probe; otherwise capture the supplied argv, bounded stdout/stderr, UTF-8 status and exit result. |
+| `diff [--output file] <left.json> <right.json>` | Compare snapshot, resolve, or probe JSON with explicit semantic findings and priorities. |
+| `report --redact [--output file] <input>` | Produce an Issue-ready Markdown report with secret and home-path redaction summary. |
+
+## Examples
+
+```powershell
+# Capture a context.
+.\agentexectrace.exe snapshot --output windows.json
+
+# Explain one executable, including PATH/PATHEXT order.
+.\agentexectrace.exe resolve git --output git.json
+
+# Exercise argv, UTF-8, stdout, stderr and a fixed exit code without a shell.
+.\agentexectrace.exe probe
+
+# Keep custom process probing when needed.
+.\agentexectrace.exe probe -- cmd.exe /c "git --version"
+
+# Compare the same kind of JSON evidence from two contexts.
+.\agentexectrace.exe diff windows.json wsl.json
+
+# Prepare a shareable Markdown copy; inspect it before posting.
+.\agentexectrace.exe report --redact --output report.md windows.json
+```
 
 ## Troubleshooting examples
 
@@ -38,7 +68,9 @@ dependency.
    contexts and compare PATHEXT/candidate order. See [Codex issue
    #15174](https://github.com/openai/codex/issues/15174).
 3. When a WSL-launched agent appears to use Windows/MINGW tools or UNC paths,
-   compare platform, CWD and path namespace. See [Claude Code issue
+   run `snapshot` in WSL and PowerShell, then compare the two files. A finding
+   such as `execution_namespace_changed`, `cwd_changed`, or
+   `path_namespace_changed` identifies the boundary. See [Claude Code issue
    #19653](https://github.com/anthropics/claude-code/issues/19653).
 
 ## Privacy
@@ -46,8 +78,9 @@ dependency.
 `snapshot` reports PATH and PATHEXT as diagnostic evidence, but never exports
 all environment variables. Before sharing an artifact, use `report --redact`.
 It removes common credential assignments, bearer tokens, `sk-` keys, PEM
-private-key blocks and JWT-shaped values. Review every report before sharing:
-redaction is defense-in-depth, not a guarantee.
+private-key blocks, JWT-shaped values and home/profile path prefixes. It also
+counts redactions by category. Review every report before sharing: redaction is
+defense-in-depth, not a guarantee.
 
 ## Scope and contributing
 

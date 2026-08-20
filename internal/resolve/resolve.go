@@ -10,11 +10,14 @@ type Platform string
 
 const Windows Platform = "windows"
 
+const POSIX Platform = "posix"
+
 const MaxCandidates = 128
 
 type Candidate struct {
-	Path   string `json:"path"`
-	Exists bool   `json:"exists"`
+	Path       string `json:"path"`
+	Exists     bool   `json:"exists"`
+	Provenance string `json:"provenance,omitempty"`
 }
 
 type Result struct {
@@ -37,9 +40,9 @@ func Resolve(name string, dirs, extensions []string, platform Platform) Result {
 			if extension != "" && !strings.HasSuffix(strings.ToLower(name), strings.ToLower(extension)) {
 				candidate += extension
 			}
-			exists := fileExists(candidate, platform == Windows)
+			exists, provenance := candidateInfo(candidate, platform)
 			if len(result.Candidates) < MaxCandidates {
-				result.Candidates = append(result.Candidates, Candidate{Path: candidate, Exists: exists})
+				result.Candidates = append(result.Candidates, Candidate{Path: candidate, Exists: exists, Provenance: provenance})
 			} else {
 				result.Truncated = true
 			}
@@ -59,23 +62,54 @@ func Resolve(name string, dirs, extensions []string, platform Platform) Result {
 	return result
 }
 
-func fileExists(path string, caseInsensitive bool) bool {
+func candidateInfo(path string, platform Platform) (bool, string) {
 	info, err := os.Stat(path)
 	if err == nil {
-		return !info.IsDir()
+		return usable(info, path, platform)
 	}
-	if !caseInsensitive {
-		return false
+	if platform != Windows {
+		return false, ""
 	}
 	entries, err := os.ReadDir(filepath.Dir(path))
 	if err != nil {
-		return false
+		return false, ""
 	}
 	for _, entry := range entries {
 		if strings.EqualFold(entry.Name(), filepath.Base(path)) {
 			info, err := os.Stat(filepath.Join(filepath.Dir(path), entry.Name()))
-			return err == nil && !info.IsDir()
+			if err != nil {
+				return false, ""
+			}
+			return usable(info, filepath.Join(filepath.Dir(path), entry.Name()), platform)
 		}
 	}
-	return false
+	return false, ""
+}
+
+func usable(info os.FileInfo, path string, platform Platform) (bool, string) {
+	if info.IsDir() || (platform != Windows && info.Mode().Perm()&0o111 == 0) {
+		return false, ""
+	}
+	return true, provenance(path)
+}
+
+func provenance(path string) string {
+	lower := strings.ToLower(path)
+	base := filepath.Base(lower)
+	switch {
+	case base == "wsl.exe":
+		return "WSL launcher"
+	case base == "git-bash.exe" || strings.Contains(lower, "\\git\\bin\\bash.exe") || strings.Contains(lower, "/git/bin/bash") || strings.Contains(lower, "msys"):
+		return "Git Bash / MSYS candidate"
+	case strings.HasSuffix(lower, ".cmd"):
+		return "cmd shim"
+	case strings.HasSuffix(lower, ".bat"):
+		return "bat shim"
+	case strings.HasSuffix(lower, ".ps1"):
+		return "PowerShell script"
+	case strings.HasSuffix(lower, ".exe") || filepath.Ext(path) == "":
+		return "native executable"
+	default:
+		return "unknown"
+	}
 }

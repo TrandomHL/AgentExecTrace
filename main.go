@@ -10,21 +10,27 @@ import (
 	"os"
 	"strings"
 
-	"github.com/agentexectrace/agentexectrace/internal/contextinfo"
-	"github.com/agentexectrace/agentexectrace/internal/diff"
-	"github.com/agentexectrace/agentexectrace/internal/model"
-	"github.com/agentexectrace/agentexectrace/internal/probe"
-	"github.com/agentexectrace/agentexectrace/internal/redact"
-	"github.com/agentexectrace/agentexectrace/internal/resolve"
+	"github.com/TrandomHL/AgentExecTrace/internal/contextinfo"
+	"github.com/TrandomHL/AgentExecTrace/internal/diff"
+	"github.com/TrandomHL/AgentExecTrace/internal/probe"
+	"github.com/TrandomHL/AgentExecTrace/internal/redact"
+	"github.com/TrandomHL/AgentExecTrace/internal/resolve"
 )
 
 var version = "0.1.0-dev"
+
+const selfProbeFlag = "--agentexectrace-self-probe"
 
 func main() {
 	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
 }
 
 func run(args []string, stdout, stderr io.Writer) int {
+	if len(args) > 0 && args[0] == selfProbeFlag {
+		fmt.Fprintln(stdout, "agentexectrace-self-probe-stdout spaces \"quotes\" 中文")
+		fmt.Fprintln(stderr, "agentexectrace-self-probe-stderr")
+		return 7
+	}
 	if len(args) == 0 {
 		usage(stderr)
 		return 2
@@ -89,10 +95,18 @@ func probeCommand(args []string, stdout io.Writer) error {
 	flags.SetOutput(io.Discard)
 	limit := flags.Int("max-bytes", 64*1024, "maximum stored bytes per stream")
 	output := flags.String("output", "", "write JSON to file")
-	if err := flags.Parse(args); err != nil || flags.NArg() == 0 || *limit < 0 {
-		return errors.New("usage: probe [--max-bytes n] [--output file] -- <command> [args...]")
+	if err := flags.Parse(args); err != nil || *limit < 0 {
+		return errors.New("usage: probe [--max-bytes n] [--output file] [-- <command> [args...]]")
 	}
-	return writeJSON(*output, probe.Run(context.Background(), flags.Args(), *limit, nil), stdout)
+	argv := flags.Args()
+	if len(argv) == 0 {
+		executable, err := os.Executable()
+		if err != nil {
+			return err
+		}
+		argv = []string{executable, selfProbeFlag, "spaces value", `"quoted"`, "中文"}
+	}
+	return writeJSON(*output, probe.Run(context.Background(), argv, *limit, nil), stdout)
 }
 
 func diffCommand(args []string, stdout io.Writer) error {
@@ -102,15 +116,19 @@ func diffCommand(args []string, stdout io.Writer) error {
 	if err := flags.Parse(args); err != nil || flags.NArg() != 2 {
 		return errors.New("usage: diff [--output file] <left.json> <right.json>")
 	}
-	left, err := readSnapshot(flags.Arg(0))
+	left, err := os.ReadFile(flags.Arg(0))
 	if err != nil {
 		return err
 	}
-	right, err := readSnapshot(flags.Arg(1))
+	right, err := os.ReadFile(flags.Arg(1))
 	if err != nil {
 		return err
 	}
-	return writeJSON(*output, diff.Compare(left, right), stdout)
+	changes, err := diff.CompareJSON(left, right)
+	if err != nil {
+		return err
+	}
+	return writeJSON(*output, changes, stdout)
 }
 
 func reportCommand(args []string, stdout io.Writer) error {
@@ -125,27 +143,12 @@ func reportCommand(args []string, stdout io.Writer) error {
 	if err != nil {
 		return err
 	}
-	sanitized := redact.Text(string(data))
+	sanitized := redact.Report(string(data))
 	if *output == "" {
 		_, err = io.WriteString(stdout, sanitized)
 		return err
 	}
 	return os.WriteFile(*output, []byte(sanitized), 0o600)
-}
-
-func readSnapshot(path string) (model.Snapshot, error) {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return model.Snapshot{}, err
-	}
-	var snapshot model.Snapshot
-	if err := json.Unmarshal(data, &snapshot); err != nil {
-		return model.Snapshot{}, fmt.Errorf("decode %s: %w", path, err)
-	}
-	if snapshot.SchemaVersion != 1 {
-		return model.Snapshot{}, fmt.Errorf("unsupported snapshot schema %d", snapshot.SchemaVersion)
-	}
-	return snapshot, nil
 }
 
 func writeJSON(path string, value any, stdout io.Writer) error {
@@ -170,5 +173,5 @@ func split(value string, separator rune) []string {
 
 func usage(writer io.Writer) {
 	fmt.Fprintln(writer, "AgentExecTrace: local execution-context evidence")
-	fmt.Fprintln(writer, "commands: snapshot, resolve, probe, diff, report --redact")
+	fmt.Fprintln(writer, "commands: snapshot, resolve, probe [-- <command> [args...]], diff, report --redact")
 }

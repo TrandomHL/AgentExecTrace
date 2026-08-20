@@ -37,12 +37,14 @@ local context ──► snapshot.json ──► diff ──► human/JSON findin
    snapshot.
 2. `resolve` evaluates a supplied command name against an explicit PATH/PATHEXT
    input model. It does not invoke shell-specific command discovery.
-3. `probe` starts only the command supplied after `--`; it uses separate stdout
-   and stderr pipes, bounded readers and explicit result fields.
-4. `diff` decodes two snapshots and compares structured fields, preserving PATH
-   order rather than sorting it away.
-5. `report --redact` transforms input to a fresh output; it never writes back to
-   the source report.
+3. `probe` starts a supplied command or a hidden same-binary deterministic
+   helper; it uses separate stdout and stderr pipes, bounded readers and
+   explicit result fields.
+4. `diff` decodes matching snapshot, resolve or probe JSON inputs and emits
+   explicit findings with priorities, preserving PATH order rather than sorting
+   it away.
+5. `report --redact` parses JSON before rendering Markdown when possible, falls
+   back to safe text rendering, and never writes back to the source report.
 
 ## Platform design
 

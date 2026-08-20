@@ -23,7 +23,7 @@ that a user can attach to an issue or use to reproduce a mismatch.
 |---|---|
 | `snapshot` | Capture a bounded, structured description of the current context. |
 | `resolve <name>` | Explain how an executable name resolves under the current PATH/PATHEXT and namespace. |
-| `probe -- <command> [args...]` | Capture argv, launch result, bounded stdout/stderr, exit code and UTF-8 status. |
+| `probe [-- <command> [args...]]` | With no command, run a deterministic self-probe; otherwise capture argv, launch result, bounded stdout/stderr, exit code and UTF-8 status. |
 | `diff <left.json> <right.json>` | Report meaningful context changes rather than an unstructured text diff. |
 | `report --redact <input>` | Produce a shareable copy with common secrets removed. |
 
@@ -38,6 +38,10 @@ that a user can attach to an issue or use to reproduce a mismatch.
 - executable candidates, selected path and reason for selection.
 - probe argv, captured output bytes/UTF-8 validity, truncation state and exit
   result.
+
+The self-probe verifies OS/process-layer transport facts only. It cannot claim
+to observe what an AI model ultimately received; users may compare its recorded
+facts with agent output separately.
 
 ## Privacy and safety contract
 

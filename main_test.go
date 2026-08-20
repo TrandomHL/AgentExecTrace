@@ -8,8 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/agentexectrace/agentexectrace/internal/model"
+	"github.com/TrandomHL/AgentExecTrace/internal/model"
 )
+
+func init() {
+	if len(os.Args) > 1 && os.Args[1] == selfProbeFlag {
+		os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
+	}
+}
 
 func TestSnapshotDoesNotDumpEnvironmentValues(t *testing.T) {
 	t.Setenv("API_TOKEN", "sk_test_NEVER_IN_SNAPSHOT")
@@ -74,5 +80,17 @@ func TestProbeCommandCapturesResult(t *testing.T) {
 	}
 	if !strings.Contains(out.String(), `"exit_code": 3`) || !strings.Contains(out.String(), `"text": "out"`) || !strings.Contains(out.String(), `"text": "err"`) {
 		t.Fatalf("probe did not preserve result: %s", out.String())
+	}
+}
+
+func TestProbeWithoutArgumentsRunsSelfProbe(t *testing.T) {
+	var out, errOut bytes.Buffer
+	if code := run([]string{"probe"}, &out, &errOut); code != 0 {
+		t.Fatalf("self-probe failed: %s", errOut.String())
+	}
+	for _, want := range []string{`"exit_code": 7`, "agentexectrace-self-probe-stdout", "agentexectrace-self-probe-stderr", "中文"} {
+		if !strings.Contains(out.String(), want) {
+			t.Fatalf("self-probe missing %q: %s", want, out.String())
+		}
 	}
 }

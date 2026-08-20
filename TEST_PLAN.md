@@ -14,10 +14,10 @@ network access, registry changes, or WSL configuration changes.
 | Model | schema version encoding/decoding, omitted optional fields, forward-safe unknown fields |
 | Path namespace | Windows drive, UNC, POSIX, `/mnt/<drive>`, relative, malformed/unknown |
 | PATH/PATHEXT | separator handling, empty entry, order preservation, case-insensitive Windows comparison, explicit extension |
-| Resolver | selected candidate, no candidate, non-executable candidate, `.exe`/`.cmd`/`.bat` ordering |
-| Probe | argv preservation, stdout versus stderr separation, exit 0/non-zero, launch failure, invalid UTF-8, truncation |
-| Diff | CWD/namespace change, added/removed/reordered PATH, resolver/probe semantic changes, stable no-difference result |
-| Redaction | name patterns, bearer/JWT-like/token/private-key values, nested JSON/text, no plaintext in output |
+| Resolver | selected candidate, no candidate, non-executable POSIX candidate, provenance, `.exe`/`.cmd`/`.bat` ordering |
+| Probe | deterministic self-probe argv/UTF-8/stdout/stderr/exit 7; custom argv preservation, launch failure, invalid UTF-8 and truncation |
+| Diff | execution namespace, CWD/path namespace, added/removed/reordered PATH, PATHEXT, resolver/probe semantic changes and golden JSON pairs |
+| Redaction | name patterns, bearer/JWT-like/token/private-key values, Windows/Linux home paths, structured JSON/Markdown output and no plaintext leakage |
 
 ## Integration tests
 

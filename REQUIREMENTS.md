@@ -38,6 +38,22 @@ that a given vendor will adopt or endorse this tool.
 | NFR-04 | Capture sizes are bounded and truncation is explicit. |
 | NFR-05 | Linux CI checks portable behavior; Windows CI checks Windows semantics; WSL is validated in controlled CI or a recorded manual gate. |
 
+## v0.1 compliance matrix — Phase 5 baseline
+
+| Requirement | Implementation | Test | Status | Evidence |
+|---|---|---|---|---|
+| FR-01 | Versioned `model.Snapshot`; no environment dump | `TestSnapshotDoesNotDumpEnvironmentValues` | PASS (local) | `go test ./...` 2026-08-20 |
+| FR-02 | `pathinfo.Classify` | `TestClassify` | PASS (local) | `go test ./...` 2026-08-20 |
+| FR-03 | PATH/PATHEXT resolver, Windows case handling and provenance | `internal/resolve` tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
+| FR-04 | Bounded custom probe and same-binary self-probe | `TestProbeCommandCapturesResult`, `TestProbeWithoutArgumentsRunsSelfProbe` | PASS (local); CI pending | `go test ./...` 2026-08-20 |
+| FR-05 | Explicit snapshot/PATH/PATHEXT/resolve/probe comparisons | `internal/diff` semantic and golden tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
+| FR-06 | Structured JSON/text report redaction, summaries and home paths | `internal/redact` and report tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
+| FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS (local); CI pending | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
+
+Remote Windows/Linux CI and the controlled Phase 5 WSL gate remain **NOT RUN**
+until this unpushed change set is validated there. They must not be inferred
+from CI for an earlier commit.
+
 ## Out of scope
 
 The v0.1 non-goals in `PRODUCT_SPEC.md` are binding requirements. In particular,

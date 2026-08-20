@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "platform": {"os": "linux", "arch": "amd64", "is_wsl": true},
+  "cwd": "/mnt/c/repo",
+  "path_namespace": "wsl-mount",
+  "path": ["b", "a", "d"],
+  "path_ext": [".EXE", ".CMD"]
+}
