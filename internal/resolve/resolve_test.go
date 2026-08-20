@@ -26,6 +26,19 @@ func TestResolveWindowsUsesPathAndPATHEXTOrder(t *testing.T) {
 	}
 }
 
+func TestResolveWindowsMatchesPATHEXTCandidateCaseInsensitively(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "tool.cmd")
+	if err := os.WriteFile(path, []byte("fixture"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	result := Resolve("tool", []string{dir}, []string{".CMD"}, Windows)
+	if result.Selected == "" || !result.Candidates[0].Exists {
+		t.Fatalf("case-insensitive candidate was not found: %#v", result)
+	}
+}
+
 func TestResolveKeepsExplicitExtension(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "tool.cmd")

@@ -37,8 +37,7 @@ func Resolve(name string, dirs, extensions []string, platform Platform) Result {
 			if extension != "" && !strings.HasSuffix(strings.ToLower(name), strings.ToLower(extension)) {
 				candidate += extension
 			}
-			info, err := os.Stat(candidate)
-			exists := err == nil && !info.IsDir()
+			exists := fileExists(candidate, platform == Windows)
 			if len(result.Candidates) < MaxCandidates {
 				result.Candidates = append(result.Candidates, Candidate{Path: candidate, Exists: exists})
 			} else {
@@ -58,4 +57,25 @@ func Resolve(name string, dirs, extensions []string, platform Platform) Result {
 		result.Reason += "; candidate list truncated"
 	}
 	return result
+}
+
+func fileExists(path string, caseInsensitive bool) bool {
+	info, err := os.Stat(path)
+	if err == nil {
+		return !info.IsDir()
+	}
+	if !caseInsensitive {
+		return false
+	}
+	entries, err := os.ReadDir(filepath.Dir(path))
+	if err != nil {
+		return false
+	}
+	for _, entry := range entries {
+		if strings.EqualFold(entry.Name(), filepath.Base(path)) {
+			info, err := os.Stat(filepath.Join(filepath.Dir(path), entry.Name()))
+			return err == nil && !info.IsDir()
+		}
+	}
+	return false
 }
