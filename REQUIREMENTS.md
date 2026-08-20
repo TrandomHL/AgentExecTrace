@@ -25,7 +25,7 @@ that a given vendor will adopt or endorse this tool.
 | FR-03 | `resolve` MUST inspect PATH and, on Windows, PATHEXT, then report candidate order, selected candidate and unresolved reason. | E-02, E-03 | Deterministic temporary-directory fixtures |
 | FR-04 | `probe` MUST record provided argv; separately capture bounded stdout and stderr; record exit code/launch error; and mark invalid UTF-8 rather than corrupting it. | E-05 | Helper-process integration tests |
 | FR-05 | `diff` MUST compare snapshot fields semantically, identify added/removed/reordered PATH entries and report namespace, CWD, executable-resolution and probe-result changes. | E-01, E-04 | Golden JSON-pair tests |
-| FR-06 | `report --redact` MUST redact common secret-bearing names and recognized token/private-key patterns from structured data and text. | E-06 | Secret fixture tests with no plaintext expected output |
+| FR-06 | `report --redact` MUST redact bare and prefixed common secret-bearing names, URL credentials, and recognized token/private-key patterns from structured data and text. | E-06 | Adversarial secret fixture tests with no plaintext expected output |
 | FR-07 | Commands MUST be read-only and MUST NOT modify PATH, registry, WSL settings, execution policy, user configuration or project configuration. | Product safety boundary | Integration test plus code review checklist |
 
 ## Non-functional requirements

@@ -107,7 +107,7 @@ func provenance(path string) string {
 		return "bat shim"
 	case strings.HasSuffix(lower, ".ps1"):
 		return "PowerShell script"
-	case strings.HasSuffix(lower, ".exe") || filepath.Ext(path) == "":
+	case strings.HasSuffix(lower, ".exe"):
 		return "native executable"
 	default:
 		return "unknown"

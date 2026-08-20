@@ -117,3 +117,15 @@
   that distro has neither `go` nor `gofmt`; no WSL configuration was changed.
   The next attempt will cross-build the current source on Windows and execute
   the temporary Linux binary in the existing WSL environment.
+
+## Session: 2026-08-20 — Phase 5.1 Release Gate Closure
+
+- **Status:** in progress.
+- Read the target and policy-source repository branch, HEAD, worktree, policy,
+  configuration, product, requirement, architecture, test, roadmap and status
+  records. Target `main` is clean at `8948c2a`; the policy source is dirty and
+  remains untouched.
+- Created isolated worktree branch `agent/phase-5-1-release-gate-closure` at
+  the same SHA. Persisted the Superpowers delivery plan after a Ponytail scope
+  review: small name-based redaction, no executable-format inspection, no
+  generic scanner or rules engine.

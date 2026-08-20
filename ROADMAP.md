@@ -1,45 +1,33 @@
 # AgentExecTrace Roadmap
 
-## Phase 0 — Project foundation (current)
+## Phases 0–4 — Foundation through local conformance
 
-- Persist the plan, findings and progress files.
-- Publish formal product, requirements, architecture, test and roadmap docs.
-- Record source-policy migration status without inventing missing source files.
-- **Gate:** documentation/plan gate in `task_plan.md` passes before code.
+Completed on the v0.1 baseline: scope and evidence mapping, test-first Go CLI
+implementation, the five frozen commands, repository documentation, Windows
+and Linux CI configuration, and a tag-triggered release workflow. Completion
+of these implementation phases does not itself satisfy a release gate.
 
-## Phase 1 — Test-first core
+## Phase 5.1 — v0.1 Release Gate Closure (current)
 
-- Initialize the Go module and deterministic test helpers/fixtures.
-- Define versioned snapshot/report structures and redaction test corpus.
-- **Gate:** test skeleton proves the required failure modes before command code.
+- Close only the independently identified blockers: bare-field/text redaction,
+  uncertain POSIX provenance, same-target provenance diffing, and release
+  asset validation.
+- Add focused adversarial regression tests; do not add a secret scanner,
+  executable-format detector, shell emulator, rules engine, sixth command, or
+  new platform/release matrix.
+- Run formatting, vet, tests and build on one commit, then collect actual
+  Windows CI, Ubuntu CI, and controlled WSL evidence.
+- Synchronize the product, requirement, test, roadmap, README, changelog and
+  status records with that evidence. Do not create a release tag or release.
+- **Gate:** independent v0.1 Release Gate review after all required evidence is
+  recorded. This phase does not self-declare release readiness.
 
-## Phase 2 — v0.1 commands
+## Phase 6 — Dogfood and external validation (after release)
 
-- Build `snapshot`, then `resolve`, then `probe`, `diff`, and `report --redact`.
-- Keep one focused commit per coherent feature and update requirement evidence.
-- **Gate:** functional requirements FR-01 through FR-07 verified locally.
-
-## Phase 3 — Open-source readiness
-
-- Add README with at least three real troubleshooting examples:
-  1. terminal and agent have different CWD;
-  2. broken PATHEXT causes `git` name resolution to fail;
-  3. WSL/Windows namespace or stdout/stderr mismatch.
-- Add CHANGELOG, CONTRIBUTING, issue templates, Windows/Linux CI, release
-  workflow and checksums.
-- **Gate:** release criteria in `PRODUCT_SPEC.md` pass; repository worktree is
-  clean after the release-readiness commit.
-
-## Phase 4 — 6–8 week adoption review
-
-- Collect only organic, publicly verifiable or consented troubleshooting use.
-- Evaluate the adoption gate in `PRODUCT_SPEC.md`; do not create fake issues,
-  stars, reports or adoption metrics.
-- Reprioritize only evidenced needs; keep vendor-specific repair and automated
-  remediation outside v0.1 unless separately approved.
-
-## Deferred decisions
-
-- Project name may change without changing the v0.1 boundary.
-- Choose MIT or Apache-2.0 before the first public release.
-- Migrate source policy files only after `E:\project\_AD9361` becomes available.
+- Collect only organic, reproducible troubleshooting cases from supported
+  Windows/WSL agent environments.
+- Assess the adoption gate in `PRODUCT_SPEC.md` after 6–8 weeks using actual
+  evidence; absence of evidence leaves the gate open.
+- Consider only evidence-backed v0.1.1 changes. GUI, MCP, LLM/API integration,
+  telemetry, backends, auto-fix, plugins, installers, full platform doctors,
+  and ARM matrix expansion remain out of scope unless separately approved.

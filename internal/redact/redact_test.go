@@ -41,3 +41,42 @@ func TestReportRedactsStructuredAuthorizationAndGenericKey(t *testing.T) {
 		}
 	}
 }
+
+func TestReportRedactsBareCredentialFieldsInNestedJSONAndText(t *testing.T) {
+	input := `{
+  "nested": {
+    "token": "nested-token-value",
+    "password": "nested-password-value",
+    "secret": "nested-secret-value",
+    "key": "nested-key-value",
+    "authorization": "Basic nested-authorization-value"
+  },
+  "stdout": {"text": "token=stdout-token-value"}
+}`
+	got := Report(input)
+	for _, unsafe := range []string{
+		"nested-token-value", "nested-password-value", "nested-secret-value",
+		"nested-key-value", "nested-authorization-value", "stdout-token-value",
+	} {
+		if strings.Contains(got, unsafe) {
+			t.Fatalf("report retained %q: %s", unsafe, got)
+		}
+	}
+
+	text := "token=text-token\npassword: text-password\nsecret = text-secret\nkey: text-key\nauthorization: Basic text-authorization"
+	got = Report(text)
+	for _, unsafe := range []string{"text-token", "text-password", "text-secret", "text-key", "text-authorization"} {
+		if strings.Contains(got, unsafe) {
+			t.Fatalf("text report retained %q: %s", unsafe, got)
+		}
+	}
+}
+
+func TestTextRedactsURLCredentials(t *testing.T) {
+	got := Text("endpoint=https://alice:url-password@example.test/v1")
+	for _, unsafe := range []string{"alice", "url-password"} {
+		if strings.Contains(got, unsafe) {
+			t.Fatalf("report retained URL credential %q: %q", unsafe, got)
+		}
+	}
+}

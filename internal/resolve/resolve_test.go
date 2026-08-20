@@ -59,7 +59,7 @@ func TestResolveCapsReportedCandidatesButKeepsScanning(t *testing.T) {
 	}
 }
 
-func TestResolvePOSIXRequiresExecutableFileAndClassifiesProvenance(t *testing.T) {
+func TestResolvePOSIXRequiresExecutableFileAndKeepsProvenanceUnknown(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Windows does not provide POSIX executable permissions")
 	}
@@ -76,7 +76,7 @@ func TestResolvePOSIXRequiresExecutableFileAndClassifiesProvenance(t *testing.T)
 		t.Fatal(err)
 	}
 	result = Resolve("tool", []string{dir}, nil, Platform("posix"))
-	if result.Selected == "" || result.Candidates[0].Provenance != "native executable" {
-		t.Fatalf("executable provenance missing: %#v", result)
+	if result.Selected == "" || result.Candidates[0].Provenance != "unknown" {
+		t.Fatalf("POSIX executable provenance must remain unknown: %#v", result)
 	}
 }

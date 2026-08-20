@@ -94,3 +94,16 @@ changed, or incompatible clause and its reason in `MIGRATION_NOTES.md`.
   `.gitattributes` fixes Go source checkout line endings to LF.
 - With Go 1.26.0 newly available in Ubuntu WSL, direct WSL `go test ./...`,
   gofmt, vet, build and all five CLI commands passed.
+
+## Phase 5.1 release-gate baseline — 2026-08-20
+
+- Independent release-gate follow-up starts from clean `main`/`origin/main`
+  commit `8948c2a1fbf2739c04fb213c338b62f3dd4aeb2f` in isolated worktree branch
+  `agent/phase-5-1-release-gate-closure`.
+- Confirmed blockers: bare `token`, `password`, `secret`, `key`, and
+  `authorization` fields evade parts of redaction; POSIX no-extension files
+  are overclaimed as native executables; resolver diff ignores same-target
+  provenance changes; release asset glob is not multiline and has no unmatched
+  asset failure gate.
+- The policy source `E:\project_AD9361` is on dirty `master` and is read-only
+  for this task. Its migrated general policy is already present in the target.

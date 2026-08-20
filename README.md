@@ -77,10 +77,11 @@ go install github.com/TrandomHL/AgentExecTrace@latest
 
 `snapshot` reports PATH and PATHEXT as diagnostic evidence, but never exports
 all environment variables. Before sharing an artifact, use `report --redact`.
-It removes common credential assignments, bearer tokens, `sk-` keys, PEM
-private-key blocks, JWT-shaped values and home/profile path prefixes. It also
-counts redactions by category. Review every report before sharing: redaction is
-defense-in-depth, not a guarantee.
+It removes bare/prefixed credential assignments (including `token`, `password`,
+`secret`, `key`, and `authorization`), URL credentials, bearer tokens, `sk-`
+keys, PEM private-key blocks, JWT-shaped values and home/profile path prefixes.
+It also counts redactions by category. Review every report before sharing:
+redaction is defense-in-depth, not a guarantee.
 
 ## Scope and contributing
 

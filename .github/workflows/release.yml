@@ -29,4 +29,8 @@ jobs:
           Get-FileHash dist/*.zip,dist/*.tar.gz -Algorithm SHA256 | ForEach-Object { "{0}  {1}" -f $_.Hash.ToLower(), $_.Path.Split('\\')[-1] } | Set-Content dist/checksums.txt
       - uses: softprops/action-gh-release@v2
         with:
-          files: dist/*.zip;dist/*.tar.gz;dist/checksums.txt
+          files: |
+            dist/*.zip
+            dist/*.tar.gz
+            dist/checksums.txt
+          fail_on_unmatched_files: true

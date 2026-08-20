@@ -18,13 +18,37 @@ WSL2, without changing the user's machine or configuration.
 
 ## Current phase
 
-Phase 5 — v0.1 conformance closure (local implementation and validation complete; remote CI pending).
+Phase 5.1 — v0.1 Release Gate Closure (in progress on
+`agent/phase-5-1-release-gate-closure`, based on `8948c2a`).
 
 ## Next step
 
-Close the explicitly identified v0.1 conformance gaps without expanding the
+Close the independently identified release blockers without expanding the
 five-command public surface. Remote publication and release tagging are not
 authorized by this phase.
+
+## Phase 5.1 plan (Superpowers, simplified by Ponytail)
+
+1. Add adversarial regression coverage before changing redaction, resolver, or
+   diff behavior.
+2. Redact bare credential-like field names in structured JSON and text using
+   the existing name-based redactor; do not add a generic secret scanner.
+3. Preserve POSIX no-extension candidate provenance as `unknown`; execute-bit
+   detection remains the only selection criterion.
+4. Emit `command_provenance_changed` when resolved executable paths are the
+   same but their recorded provenance differs. Keep probe comparison limited to
+   already-recorded result metadata.
+5. Correct release asset matching and require expected assets to exist.
+6. Run `gofmt`, `go vet ./...`, `go test ./...`, and `go build ./...` against
+   one commit; record Windows/Ubuntu CI and a controlled WSL run as evidence.
+7. Synchronize product, requirement, test, roadmap, status, README and
+   changelog documents only with results actually observed.
+
+### Explicit exclusions
+
+No sixth command, ELF/shebang inspection, shell emulation, generic rules
+engine, entropy/DLP scanner, agent integration, GUI, telemetry, cloud service,
+auto-fix, plugin, installer, or ARM release matrix.
 
 ## Gates
 

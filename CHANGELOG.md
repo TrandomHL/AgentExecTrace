@@ -20,5 +20,10 @@ and Semantic Versioning.
 - `probe` supports a deterministic no-argument self-probe while retaining
   custom command probing.
 - `report --redact` renders shareable Markdown and summarizes secret, token and
-  home-path redactions; resolver reports basic provenance and honors POSIX
-  execute permissions.
+  home-path redactions; it now covers bare credential fields, URL credentials,
+  and adversarial nested/text cases.
+- POSIX execute permission remains the selection check, but a no-extension
+  candidate now reports provenance as `unknown`; `diff` reports a provenance
+  change when the selected executable remains the same.
+- Release assets use a multiline file list and fail when an expected file is
+  absent.

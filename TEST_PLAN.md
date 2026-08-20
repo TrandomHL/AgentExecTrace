@@ -17,7 +17,7 @@ network access, registry changes, or WSL configuration changes.
 | Resolver | selected candidate, no candidate, non-executable POSIX candidate, provenance, `.exe`/`.cmd`/`.bat` ordering |
 | Probe | deterministic self-probe argv/UTF-8/stdout/stderr/exit 7; custom argv preservation, launch failure, invalid UTF-8 and truncation |
 | Diff | execution namespace, CWD/path namespace, added/removed/reordered PATH, PATHEXT, resolver/probe semantic changes and golden JSON pairs |
-| Redaction | name patterns, bearer/JWT-like/token/private-key values, Windows/Linux home paths, structured JSON/Markdown output and no plaintext leakage |
+| Redaction | bare and prefixed credential fields in nested JSON and stdout text, URL credentials, bearer/JWT-like/token/private-key values, Windows/Linux home paths, structured JSON/Markdown output and no plaintext leakage |
 
 ## Integration tests
 

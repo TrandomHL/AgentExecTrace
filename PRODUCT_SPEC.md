@@ -1,6 +1,6 @@
 # AgentExecTrace Product Specification
 
-**Status:** Phase 0 — scope frozen for v0.1
+**Status:** Phase 5.1 — v0.1 Release Gate Closure (scope frozen)
 **Target:** Windows 11 + WSL2
 **Implementation:** Go, single executable, standard library first
 **Audience:** developers and maintainers diagnosing AI coding-agent command
@@ -49,9 +49,10 @@ facts with agent output separately.
 - Output is local only. v0.1 contains no telemetry, cloud service, database, or
   network dependency.
 - `report --redact` is mandatory before a report is labelled shareable. It
-  redacts values associated with common credential-like names and recognized
-  token/private-key patterns; it also reports the number and category of
-  redactions without displaying the values.
+  redacts values associated with bare and prefixed credential-like field names
+  (`token`, `password`, `secret`, `key`, `authorization`, and `*_TOKEN`-style
+  names), URL credentials, and recognized token/private-key patterns; it also
+  reports the number and category of redactions without displaying the values.
 - Probe output is size-bounded; reports identify truncation rather than silently
   omitting data.
 - Every command is read-only with respect to user machine configuration.
