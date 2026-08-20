@@ -104,3 +104,5 @@ behaviors before adding command implementation.
 |---|---:|---|
 | Initial path typo created empty `E:\project\_Open` repository | 1 | Stopped immediately when corrected; no product files or commits were created there. |
 | `E:\project\_AD9361` absent | 1 | Defer migration; record the exact paths and do not fabricate policy content. |
+| Go unavailable on PATH | 1 | Inspect local standard installation locations; request permission only if installation is required. |
+| Local Go-location check had an invalid PowerShell pipeline | 1 | Retry with a grouped `foreach` expression; no system or repository state changed. |

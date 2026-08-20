@@ -21,6 +21,10 @@
   untouched after the correction.
 - Requested migration source `E:\project\_AD9361` was absent when inspected.
   Consequently neither requested source file can be copied or modified yet.
+- No Go toolchain is available on PATH or at the common Program Files,
+  LocalAppData or Scoop locations. The bundled workspace runtime supplies Git,
+  Node and Python, but not Go. This blocks compiling or executing the required
+  Go test-first foundation until an approved Go toolchain is available.
 
 ## Public issue evidence to verify and cite in requirements
 

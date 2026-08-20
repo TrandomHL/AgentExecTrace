@@ -40,6 +40,8 @@
 | 2026-08-20 | First command used unsupported `New-Item -LiteralPath` while creating the typo-path directory | 1 | Used supported `-Path`; no product content was affected. |
 | 2026-08-20 | Target path initially supplied as `E:\project\_Open` | 1 | Stopped and restarted only at corrected `E:\project_Open`. |
 | 2026-08-20 | Requested migration source absent | 1 | Deferred migration and prohibited any fabricated inherited policy file. |
+| 2026-08-20 | `go version` reported no Go command on PATH | 1 | Check standard local installation locations before requesting a Go installation. |
+| 2026-08-20 | Local Go-location inspection had an empty PowerShell pipe element | 1 | Use a grouped loop result before piping; no files changed. |
 
 ## Test results
 
