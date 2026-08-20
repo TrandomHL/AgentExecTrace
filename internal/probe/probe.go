@@ -50,9 +50,9 @@ func Run(ctx context.Context, argv []string, limit int, overrides map[string]str
 	stderrResult := make(chan Capture, 1)
 	go func() { stdoutResult <- capture(stdout, limit) }()
 	go func() { stderrResult <- capture(stderr, limit) }()
-	err = cmd.Wait()
 	result.Stdout = <-stdoutResult
 	result.Stderr = <-stderrResult
+	err = cmd.Wait()
 	if err == nil {
 		result.ExitCode = 0
 		return result

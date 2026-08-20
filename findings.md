@@ -83,3 +83,14 @@ changed, or incompatible clause and its reason in `MIGRATION_NOTES.md`.
   A Windows cross-built Linux amd64 binary ran all five commands in that WSL and
   reported `os=linux`, `is_wsl=true`, CWD `/mnt/e/project_Open`, and namespace
   `wsl-mount`. The temporary binary was removed after the run.
+
+## Phase 5 CI correction — 2026-08-20
+
+- CI run `32350238908` failed for two verified causes: Linux lost output from a
+  fast self-probe because `cmd.Wait` closed `StdoutPipe`/`StderrPipe` before the
+  capture goroutines completed; Windows checked out Go files as CRLF and made
+  `gofmt -l` report every file.
+- `probe.Run` now drains both pipes before waiting for the child, and
+  `.gitattributes` fixes Go source checkout line endings to LF.
+- With Go 1.26.0 newly available in Ubuntu WSL, direct WSL `go test ./...`,
+  gofmt, vet, build and all five CLI commands passed.

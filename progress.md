@@ -109,6 +109,10 @@
 - Terra review found a structured-report leak for `Authorization` and `*_KEY`
   fields. Added a regression test and fixed both structured-key and text-key
   redaction; vet, test, build and diff checks pass afterward.
+- Diagnosed CI run `32350238908`: a probe pipe-drain ordering race failed the
+  Linux self-probe, and CRLF checkout caused the Windows gofmt false failure.
+  Fixed both, then passed Windows and direct Ubuntu WSL gofmt/vet/test/build
+  plus all five CLI commands with Go 1.26.0.
 - Attempted the required Ubuntu WSL source validation. It did not start because
   that distro has neither `go` nor `gofmt`; no WSL configuration was changed.
   The next attempt will cross-build the current source on Windows and execute
