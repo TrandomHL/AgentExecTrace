@@ -1,6 +1,6 @@
 # AgentExecTrace Product Specification
 
-**Status:** Phase 5.1 — v0.1 Release Gate Closure (final correction pending CI and independent delta audit)
+**Status:** v0.1 release candidate — Release Gate passed; publication pending
 **Target:** Windows 11 + WSL2
 **Implementation:** Go, single executable, standard library first
 **Audience:** developers and maintainers diagnosing AI coding-agent command
@@ -32,7 +32,6 @@ that a user can attach to an issue or use to reproduce a mismatch.
 - OS and architecture; Windows versus WSL2 identification.
 - CWD and its classified path namespace: Windows drive, UNC, WSL Linux path,
   mounted Windows path, or unknown.
-- shell/process identity where discoverable without extra dependencies.
 - PATH segment metadata and PATHEXT values, without copying all environment
   variables by default.
 - executable candidates, including separate existence and executability facts,

@@ -7,7 +7,7 @@ implementation, the five frozen commands, repository documentation, Windows
 and Linux CI configuration, and a tag-triggered release workflow. Completion
 of these implementation phases does not itself satisfy a release gate.
 
-## Phase 5.1 — v0.1 Release Gate Closure (current)
+## Phase 5.1 — v0.1 Release Gate Closure (complete)
 
 - Close only the independently identified blockers: POSIX candidate existence
   versus executability facts and `go install` version evidence.

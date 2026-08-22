@@ -50,11 +50,12 @@ that a given vendor will adopt or endorse this tool.
 | FR-06 | Structured JSON/text report redaction, summaries and home paths | `internal/redact` and report tests | PASS | local gate and GitHub CI run `32364080361` |
 | FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
 
-Windows and Ubuntu CI passed for the Phase 5.1 implementation commit in
-GitHub Actions run `32364080361`; the final evidence commit also passed in run
-`32364353630`. Controlled Ubuntu WSL validation passed all five public
-commands. Any later behavior-changing commit must obtain its own validation
-evidence before independent review.
+The behavioral release candidate is
+`09fab49a609f1b27bc95c3f13a073623d76b02f4`. GitHub Actions run `32383666355`
+passed on Windows and Ubuntu. Controlled Ubuntu WSL validation passed all five
+public commands. Any later behavior-changing commit must obtain its own
+validation evidence before independent review; a documentation-only metadata
+commit does not replace the behavioral candidate SHA.
 
 ## Out of scope
 
