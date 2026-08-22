@@ -5,6 +5,8 @@ and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-23
+
 ### Added
 
 - v0.1 baseline: snapshot, executable resolution, process probe, semantic
@@ -20,5 +22,14 @@ and Semantic Versioning.
 - `probe` supports a deterministic no-argument self-probe while retaining
   custom command probing.
 - `report --redact` renders shareable Markdown and summarizes secret, token and
-  home-path redactions; resolver reports basic provenance and honors POSIX
-  execute permissions.
+  home-path redactions; it now covers bare credential fields, URL credentials,
+  and adversarial nested/text cases.
+- POSIX execute permission remains the selection check, but a no-extension
+  candidate now reports provenance as `unknown`; `diff` reports a provenance
+  change when the selected executable remains the same.
+- Resolver candidates now report existence separately from executability, so a
+  non-executable POSIX file is not reported as absent.
+- The `go install` instructions pin the intended v0.1.0 source version and
+  distinguish source-build from release-workflow provenance.
+- Release assets use a multiline file list and fail when an expected file is
+  absent.

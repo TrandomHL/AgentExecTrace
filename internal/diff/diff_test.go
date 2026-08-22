@@ -33,6 +33,12 @@ func TestCompareResolveAndProbeEvidence(t *testing.T) {
 	if !HasFinding(CompareResolve(leftResolve, resolve.Result{Name: "bash"}), "command_missing") {
 		t.Fatal("missing command missing finding")
 	}
+	if !HasFinding(CompareResolve(
+		resolve.Result{Name: "bash", Selected: `C:\\Program Files\\Git\\bin\\bash.exe`, Candidates: []resolve.Candidate{{Path: `C:\\Program Files\\Git\\bin\\bash.exe`, Exists: true, Provenance: "Git Bash / MSYS candidate"}}},
+		resolve.Result{Name: "bash", Selected: `C:\\Program Files\\Git\\bin\\bash.exe`, Candidates: []resolve.Candidate{{Path: `C:\\Program Files\\Git\\bin\\bash.exe`, Exists: true, Provenance: "native executable"}}},
+	), "command_provenance_changed") {
+		t.Fatal("missing command provenance finding")
+	}
 	leftProbe := probe.Result{ExitCode: 0, Stdout: probe.Capture{Text: "marker"}}
 	rightProbe := probe.Result{ExitCode: 7, Stdout: probe.Capture{Text: "marker"}}
 	if !HasFinding(CompareProbe(leftProbe, rightProbe), "probe_result_changed") {

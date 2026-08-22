@@ -25,7 +25,7 @@ that a given vendor will adopt or endorse this tool.
 | FR-03 | `resolve` MUST inspect PATH and, on Windows, PATHEXT, then report candidate order, selected candidate and unresolved reason. | E-02, E-03 | Deterministic temporary-directory fixtures |
 | FR-04 | `probe` MUST record provided argv; separately capture bounded stdout and stderr; record exit code/launch error; and mark invalid UTF-8 rather than corrupting it. | E-05 | Helper-process integration tests |
 | FR-05 | `diff` MUST compare snapshot fields semantically, identify added/removed/reordered PATH entries and report namespace, CWD, executable-resolution and probe-result changes. | E-01, E-04 | Golden JSON-pair tests |
-| FR-06 | `report --redact` MUST redact common secret-bearing names and recognized token/private-key patterns from structured data and text. | E-06 | Secret fixture tests with no plaintext expected output |
+| FR-06 | `report --redact` MUST redact bare and prefixed common secret-bearing names, URL credentials, and recognized token/private-key patterns from structured data and text. | E-06 | Adversarial secret fixture tests with no plaintext expected output |
 | FR-07 | Commands MUST be read-only and MUST NOT modify PATH, registry, WSL settings, execution policy, user configuration or project configuration. | Product safety boundary | Integration test plus code review checklist |
 
 ## Non-functional requirements
@@ -34,7 +34,7 @@ that a given vendor will adopt or endorse this tool.
 |---|---|
 | NFR-01 | Build as one Go executable with no Node/Python runtime, service, database or required network access. |
 | NFR-02 | Prefer Go standard library; any dependency needs a documented v0.1 necessity review. |
-| NFR-03 | Outputs are deterministic where machine state permits and include schema/tool versions. |
+| NFR-03 | Outputs are deterministic where machine state permits and include schema/tool versions. Source installs for v0.1 report `0.1.0`; release assets inject the release tag. |
 | NFR-04 | Capture sizes are bounded and truncation is explicit. |
 | NFR-05 | Linux CI checks portable behavior; Windows CI checks Windows semantics; WSL is validated in controlled CI or a recorded manual gate. |
 
@@ -42,17 +42,20 @@ that a given vendor will adopt or endorse this tool.
 
 | Requirement | Implementation | Test | Status | Evidence |
 |---|---|---|---|---|
-| FR-01 | Versioned `model.Snapshot`; no environment dump | `TestSnapshotDoesNotDumpEnvironmentValues` | PASS (local) | `go test ./...` 2026-08-20 |
-| FR-02 | `pathinfo.Classify` | `TestClassify` | PASS (local) | `go test ./...` 2026-08-20 |
-| FR-03 | PATH/PATHEXT resolver, Windows case handling and provenance | `internal/resolve` tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-04 | Bounded custom probe and same-binary self-probe | `TestProbeCommandCapturesResult`, `TestProbeWithoutArgumentsRunsSelfProbe` | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-05 | Explicit snapshot/PATH/PATHEXT/resolve/probe comparisons | `internal/diff` semantic and golden tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-06 | Structured JSON/text report redaction, summaries and home paths | `internal/redact` and report tests | PASS (local); CI pending | `go test ./...` 2026-08-20 |
-| FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS (local); CI pending | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
+| FR-01 | Versioned `model.Snapshot`; no environment dump | `TestSnapshotDoesNotDumpEnvironmentValues` | PASS | local gate and GitHub CI run `32364080361` |
+| FR-02 | `pathinfo.Classify` | `TestClassify` | PASS | local gate and GitHub CI run `32364080361` |
+| FR-03 | PATH/PATHEXT resolver, Windows case handling and provenance | `internal/resolve` tests | PASS | local gate and GitHub CI run `32364080361` |
+| FR-04 | Bounded custom probe and same-binary self-probe | `TestProbeCommandCapturesResult`, `TestProbeWithoutArgumentsRunsSelfProbe` | PASS | local gate and GitHub CI run `32364080361` |
+| FR-05 | Explicit snapshot/PATH/PATHEXT/resolve/probe comparisons | `internal/diff` semantic and golden tests | PASS | local gate and GitHub CI run `32364080361` |
+| FR-06 | Structured JSON/text report redaction, summaries and home paths | `internal/redact` and report tests | PASS | local gate and GitHub CI run `32364080361` |
+| FR-07 | Read-only command implementation; no configuration mutation | code review plus command integration tests | PASS | no mutation APIs or writes outside explicit `--output` paths inspected 2026-08-20 |
 
-Remote Windows/Linux CI and the controlled Phase 5 WSL gate remain **NOT RUN**
-until this unpushed change set is validated there. They must not be inferred
-from CI for an earlier commit.
+The behavioral release candidate is
+`09fab49a609f1b27bc95c3f13a073623d76b02f4`. GitHub Actions run `32383666355`
+passed on Windows and Ubuntu. Controlled Ubuntu WSL validation passed all five
+public commands. Any later behavior-changing commit must obtain its own
+validation evidence before independent review; a documentation-only metadata
+commit does not replace the behavioral candidate SHA.
 
 ## Out of scope
 

@@ -35,7 +35,7 @@ func TestResolveWindowsMatchesPATHEXTCandidateCaseInsensitively(t *testing.T) {
 	}
 
 	result := Resolve("tool", []string{dir}, []string{".CMD"}, Windows)
-	if result.Selected == "" || !result.Candidates[0].Exists {
+	if result.Selected == "" || !result.Candidates[0].Exists || !result.Candidates[0].Executable {
 		t.Fatalf("case-insensitive candidate was not found: %#v", result)
 	}
 }
@@ -59,7 +59,7 @@ func TestResolveCapsReportedCandidatesButKeepsScanning(t *testing.T) {
 	}
 }
 
-func TestResolvePOSIXRequiresExecutableFileAndClassifiesProvenance(t *testing.T) {
+func TestResolvePOSIXRequiresExecutableFileAndKeepsProvenanceUnknown(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Windows does not provide POSIX executable permissions")
 	}
@@ -69,14 +69,14 @@ func TestResolvePOSIXRequiresExecutableFileAndClassifiesProvenance(t *testing.T)
 		t.Fatal(err)
 	}
 	result := Resolve("tool", []string{dir}, nil, Platform("posix"))
-	if result.Selected != "" || result.Candidates[0].Exists {
-		t.Fatalf("non-executable file selected: %#v", result)
+	if result.Selected != "" || !result.Candidates[0].Exists || result.Candidates[0].Executable {
+		t.Fatalf("non-executable file facts are wrong: %#v", result)
 	}
 	if err := os.Chmod(notExecutable, 0o700); err != nil {
 		t.Fatal(err)
 	}
 	result = Resolve("tool", []string{dir}, nil, Platform("posix"))
-	if result.Selected == "" || result.Candidates[0].Provenance != "native executable" {
-		t.Fatalf("executable provenance missing: %#v", result)
+	if result.Selected == "" || !result.Candidates[0].Executable || result.Candidates[0].Provenance != "unknown" {
+		t.Fatalf("POSIX executable provenance must remain unknown: %#v", result)
 	}
 }

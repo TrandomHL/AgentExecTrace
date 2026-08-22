@@ -1,6 +1,6 @@
 # AgentExecTrace Product Specification
 
-**Status:** Phase 0 — scope frozen for v0.1
+**Status:** v0.1 release candidate — Release Gate passed; publication pending
 **Target:** Windows 11 + WSL2
 **Implementation:** Go, single executable, standard library first
 **Audience:** developers and maintainers diagnosing AI coding-agent command
@@ -32,10 +32,10 @@ that a user can attach to an issue or use to reproduce a mismatch.
 - OS and architecture; Windows versus WSL2 identification.
 - CWD and its classified path namespace: Windows drive, UNC, WSL Linux path,
   mounted Windows path, or unknown.
-- shell/process identity where discoverable without extra dependencies.
 - PATH segment metadata and PATHEXT values, without copying all environment
   variables by default.
-- executable candidates, selected path and reason for selection.
+- executable candidates, including separate existence and executability facts,
+  selected path and reason for selection.
 - probe argv, captured output bytes/UTF-8 validity, truncation state and exit
   result.
 
@@ -49,9 +49,10 @@ facts with agent output separately.
 - Output is local only. v0.1 contains no telemetry, cloud service, database, or
   network dependency.
 - `report --redact` is mandatory before a report is labelled shareable. It
-  redacts values associated with common credential-like names and recognized
-  token/private-key patterns; it also reports the number and category of
-  redactions without displaying the values.
+  redacts values associated with bare and prefixed credential-like field names
+  (`token`, `password`, `secret`, `key`, `authorization`, and `*_TOKEN`-style
+  names), URL credentials, and recognized token/private-key patterns; it also
+  reports the number and category of redactions without displaying the values.
 - Probe output is size-bounded; reports identify truncation rather than silently
   omitting data.
 - Every command is read-only with respect to user machine configuration.

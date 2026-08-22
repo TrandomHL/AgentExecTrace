@@ -9,11 +9,12 @@ import (
 )
 
 var patterns = []*regexp.Regexp{
-	regexp.MustCompile(`(?im)^(\s*[A-Za-z_][A-Za-z0-9_]*(?:TOKEN|SECRET|PASSWORD|KEY)[A-Za-z0-9_]*\s*[:=]\s*)([^\r\n]+)`),
+	regexp.MustCompile(`(?im)^(\s*"?(?:[A-Za-z_][A-Za-z0-9_]*_(?:TOKEN|SECRET|PASSWORD|KEY|AUTHORIZATION)|TOKEN|SECRET|PASSWORD|KEY|AUTHORIZATION)"?\s*[:=]\s*)([^\r\n]+)`),
 	regexp.MustCompile(`(?i)(authorization\s*:\s*bearer\s+)([A-Za-z0-9._~-]{12,})`),
 	regexp.MustCompile(`\bsk-[A-Za-z0-9_-]{12,}\b`),
 	regexp.MustCompile(`(?s)-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----`),
 	regexp.MustCompile(`\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{6,}\b`),
+	regexp.MustCompile(`(?i)(https?://)([^/\s:@]+):([^@\s/]+)@`),
 }
 
 // Text returns a shareable text copy with common credential shapes replaced.
@@ -68,7 +69,11 @@ func sanitizeJSON(value any, summary *Summary) any {
 
 func isSecretName(key string) bool {
 	upper := strings.ToUpper(key)
-	return upper == "AUTHORIZATION" || strings.HasSuffix(upper, "_TOKEN") || strings.HasSuffix(upper, "_SECRET") || strings.HasSuffix(upper, "_PASSWORD") || strings.HasSuffix(upper, "_KEY")
+	switch upper {
+	case "TOKEN", "SECRET", "PASSWORD", "KEY", "AUTHORIZATION":
+		return true
+	}
+	return strings.HasSuffix(upper, "_TOKEN") || strings.HasSuffix(upper, "_SECRET") || strings.HasSuffix(upper, "_PASSWORD") || strings.HasSuffix(upper, "_KEY") || strings.HasSuffix(upper, "_AUTHORIZATION")
 }
 
 func sanitizeText(input string) (string, Summary) {
@@ -82,6 +87,7 @@ func sanitizeText(input string) (string, Summary) {
 	replace(patterns[2], "<REDACTED:api-key>", &summary.Token)
 	replace(patterns[3], "<REDACTED:private-key>", &summary.Secret)
 	replace(patterns[4], "<REDACTED:jwt>", &summary.Token)
+	replace(patterns[5], "${1}<REDACTED:credentials>@", &summary.Secret)
 	replace(windowsHome, "<HOME>", &summary.HomePath)
 	replace(posixHome, "<HOME>", &summary.HomePath)
 	return output, summary

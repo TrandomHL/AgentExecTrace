@@ -52,7 +52,19 @@ func CompareResolve(left, right resolve.Result) []Change {
 	if left.Selected != right.Selected {
 		return []Change{change("selected", "command_target_changed", HighSignal, left.Selected, right.Selected)}
 	}
+	if leftProvenance, rightProvenance := selectedProvenance(left), selectedProvenance(right); leftProvenance != rightProvenance {
+		return []Change{change("provenance", "command_provenance_changed", HighSignal, leftProvenance, rightProvenance)}
+	}
 	return nil
+}
+
+func selectedProvenance(result resolve.Result) string {
+	for _, candidate := range result.Candidates {
+		if candidate.Path == result.Selected {
+			return candidate.Provenance
+		}
+	}
+	return ""
 }
 
 func CompareProbe(left, right probe.Result) []Change {

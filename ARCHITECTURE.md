@@ -64,9 +64,10 @@ local context ──► snapshot.json ──► diff ──► human/JSON findin
   allowlist can be considered only after v0.1, not a generic `--env` dump.
 - Probe captures a fixed maximum per stream; data past the limit is discarded
   after draining enough to avoid child deadlock and marked `truncated`.
-- Redaction runs before a report is saved as shareable. Keys such as `*_TOKEN`,
-  `*_SECRET`, `*_PASSWORD`, `*_KEY`, and known credential formats are replaced
-  with typed placeholders.
+- Redaction runs before a report is saved as shareable. Bare keys such as
+  `token`, `password`, `secret`, `key`, and `authorization`, their prefixed
+  `*_TOKEN`-style forms, URL credentials, and known credential formats are
+  replaced with typed placeholders.
 - Commands never write registry keys, environment settings, WSL config, PATH,
   user/project config, or execution policy.
 
