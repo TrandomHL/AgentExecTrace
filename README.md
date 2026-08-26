@@ -53,6 +53,14 @@ For a copyable instruction snippet and a short first-run prompt, see
 `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or an equivalent agent-instructions
 file.
 
+## Interactive code graph
+
+Explore the latest committed code-structure snapshot in the [interactive
+AgentExecTrace graph](https://trandomhl.github.io/AgentExecTrace/). The raw
+[graph JSON](graphify-out/graph.json) and [graph report](graphify-out/GRAPH_REPORT.md)
+are also stored in the repository. The Pages snapshot is regenerated and
+deployed when updated graph files reach `main`.
+
 ## Build from source
 
 Go 1.26 or newer is required to build from source.
