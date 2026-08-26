@@ -5,7 +5,55 @@ by a developer and an AI coding agent. v0.1 targets Windows 11 and WSL2 and is
 diagnostic-only: it never rewrites PATH, registry, WSL, execution policy or
 agent configuration.
 
-## Build
+## Quick start
+
+### Windows: download a release
+
+If a published package is available, download the Windows amd64 ZIP from the
+[Releases page](https://github.com/TrandomHL/AgentExecTrace/releases), extract
+`agentexectrace-windows-amd64.exe`, and run:
+
+```powershell
+.\agentexectrace-windows-amd64.exe snapshot
+.\agentexectrace-windows-amd64.exe resolve git
+```
+
+To use the command from any directory, put the extracted executable in a
+directory already on `PATH`, or add its directory to `PATH` using your normal
+Windows settings. AgentExecTrace does not change `PATH` for you.
+
+### Linux or WSL2: download a release
+
+Download the Linux amd64 tarball from the [Releases
+page](https://github.com/TrandomHL/AgentExecTrace/releases), extract the
+`agentexectrace-linux-amd64` binary, and run:
+
+```bash
+chmod +x ./agentexectrace-linux-amd64
+./agentexectrace-linux-amd64 snapshot
+./agentexectrace-linux-amd64 resolve git
+```
+
+### The smallest useful comparison
+
+Run the same command in the developer terminal and in the AI agent terminal:
+
+```powershell
+.\agentexectrace.exe snapshot --output agent.json
+.\agentexectrace.exe diff terminal.json agent.json
+```
+
+Use `resolve git` when executable lookup is suspicious, and `probe` when the
+command resolves but process behavior differs.
+
+## AI agent setup
+
+For a copyable instruction snippet and a short first-run prompt, see
+[AI_AGENT_SETUP.md](AI_AGENT_SETUP.md). The snippet can be placed in
+`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or an equivalent agent-instructions
+file.
+
+## Build from source
 
 Go 1.26 or newer is required to build from source.
 
@@ -19,9 +67,9 @@ go build -o agentexectrace.exe .
 The executable has no Node, Python, service, database or network runtime
 dependency.
 
-## Install
+## Install with Go
 
-After v0.1 is published, install its tagged source:
+Go 1.26 or newer is required:
 
 ```powershell
 go install github.com/TrandomHL/AgentExecTrace@v0.1.0
@@ -29,6 +77,16 @@ go install github.com/TrandomHL/AgentExecTrace@v0.1.0
 
 `go install` builds from source and identifies itself as `0.1.0`; use a release
 asset when you need the release-workflow build provenance.
+
+The installed executable is placed in Go's normal binary directory. Ensure
+that directory is on `PATH` if the command is not found.
+
+## Upgrade and uninstall
+
+For a release install, download the new archive and replace the old extracted
+binary after checking its checksum. For a Go install, run the installation
+command again with the desired version or `@latest`. To uninstall, remove the
+binary or Go-installed executable; no service or configuration is created.
 
 ## Commands
 
