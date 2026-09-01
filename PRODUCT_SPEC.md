@@ -1,6 +1,6 @@
 # AgentExecTrace Product Specification
 
-**Status:** v0.1 release candidate — Release Gate passed; publication pending
+**Status:** v0.1.0 released — adoption validation in progress
 **Target:** Windows 11 + WSL2
 **Implementation:** Go, single executable, standard library first
 **Audience:** developers and maintainers diagnosing AI coding-agent command
