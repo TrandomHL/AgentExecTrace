@@ -50,3 +50,13 @@ is ever read by the suite.
 All unit and integration tests pass; Windows and Linux CI are green; WSL gate is
 recorded; output and error paths are covered; and an inspection of fixtures and
 goldens confirms no test artifact stores unredacted secret-like values.
+
+## Reproducible first-use experiments
+
+`go test -count=1 -v -run "^TestControlledExamples$" .` builds and invokes the
+production CLI with isolated temporary contexts. It checks real process symptoms,
+semantic diff findings and restoration controls for CWD, Windows PATHEXT and
+PATH precedence. Windows PATHEXT is explicitly skipped on other platforms.
+It also executes the literal documented `resolve` commands and checks the full
+snapshot/diff/redacted-report file workflow. See [examples](examples/README.md).
+These are controlled fixtures, not organic troubleshooting or adoption evidence.
