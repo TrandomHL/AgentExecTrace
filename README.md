@@ -9,13 +9,16 @@ agent configuration.
 
 ### Windows: download a release
 
-If a published package is available, download the Windows amd64 ZIP from the
-[Releases page](https://github.com/TrandomHL/AgentExecTrace/releases), extract
-`agentexectrace-windows-amd64.exe`, and run:
+Download the Windows amd64 ZIP and `checksums.txt` from the
+[Releases page](https://github.com/TrandomHL/AgentExecTrace/releases). Compare
+`Get-FileHash .\agentexectrace-windows-amd64.zip -Algorithm SHA256` with the
+matching checksum, then extract the ZIP. Rename the extracted executable once
+so that all Windows examples below use the same name:
 
 ```powershell
-.\agentexectrace-windows-amd64.exe snapshot
-.\agentexectrace-windows-amd64.exe resolve git
+Rename-Item .\agentexectrace-windows-amd64.exe agentexectrace.exe
+.\agentexectrace.exe snapshot
+.\agentexectrace.exe resolve git
 ```
 
 To use the command from any directory, put the extracted executable in a
@@ -36,12 +39,56 @@ chmod +x ./agentexectrace-linux-amd64
 
 ### The smallest useful comparison
 
-Run the same command in the developer terminal and in the AI agent terminal:
+For two Windows contexts, use the same executable and a shared output directory.
+In your **developer terminal**, substitute the executable path below. Keep your
+current project working directory; do not switch to the download folder:
 
 ```powershell
-.\agentexectrace.exe snapshot --output agent.json
-.\agentexectrace.exe diff terminal.json agent.json
+$tool = (Resolve-Path '<absolute path to agentexectrace.exe>').Path
+$evidence = Join-Path (Get-Location) 'aet-evidence'
+New-Item -ItemType Directory -Path $evidence -Force | Out-Null
+& $tool snapshot --output (Join-Path $evidence 'terminal.json')
+$tool
+$evidence
 ```
+
+Give the two printed absolute paths to the agent. In the **agent's command
+runner**, substitute those paths below. Do not change its working directory:
+that difference may be the evidence you are looking for.
+
+```powershell
+$tool = '<absolute path printed above to agentexectrace.exe>'
+$evidence = '<absolute path printed above to aet-evidence>'
+& $tool snapshot --output (Join-Path $evidence 'agent.json')
+& $tool diff --output (Join-Path $evidence 'diff.json') (Join-Path $evidence 'terminal.json') (Join-Path $evidence 'agent.json')
+& $tool report --redact --output (Join-Path $evidence 'report.md') (Join-Path $evidence 'diff.json')
+```
+
+Read `report.md` before sharing it. `[]` or `null` in the raw diff means no
+reported differences for the compared fields, not proof that every aspect of
+the environments matches. Raw JSON stays local. If a sandbox cannot access the
+shared directory, use an approved accessible location; do not disable isolation.
+
+#### Windows terminal versus a native WSL agent
+
+First capture `terminal.json` using the Windows steps above. In the **WSL
+agent runner**, use the Linux executable from the same release. Substitute its
+absolute Linux path and the Windows evidence-directory path printed above:
+
+```bash
+tool='/absolute/Linux/path/to/agentexectrace-linux-amd64'
+evidence="$(wslpath -u '<Windows absolute path to aet-evidence>')"
+"$tool" snapshot --output "$evidence/wsl.json"
+"$tool" diff --output "$evidence/windows-wsl-diff.json" "$evidence/terminal.json" "$evidence/wsl.json"
+"$tool" report --redact --output "$evidence/windows-wsl-report.md" "$evidence/windows-wsl-diff.json"
+```
+
+Keep the WSL runner's working directory unchanged. Both contexts must be allowed
+to access the shared folder. Running a Windows `.exe` through WSL interop measures
+a Windows process, not the native Linux context. Windows/WSL platform and path
+namespace differences are expected; they are not by themselves a fault.
+For two native Linux contexts, use the same Linux binary, separate snapshot
+filenames and a shared absolute Linux evidence path (no `wslpath` conversion).
 
 Use `resolve git` when executable lookup is suspicious, and `probe` when the
 command resolves but process behavior differs.
@@ -52,6 +99,19 @@ For a copyable instruction snippet and a short first-run prompt, see
 [AI_AGENT_SETUP.md](AI_AGENT_SETUP.md). The snippet can be placed in
 `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or an equivalent agent-instructions
 file.
+
+## Reproduce the diagnostic value
+
+Run three [controlled experiments](examples/README.md) from source:
+
+```text
+go test -count=1 -v -run "^TestControlledExamples$" .
+```
+
+They check CWD-dependent file access, Windows PATHEXT lookup failure, and PATH
+order selecting different executables. Each verifies the symptom, the diagnostic
+finding, and a restored-context control. These are synthetic experiments, not
+external adoption evidence. Windows runs all three; Linux skips PATHEXT.
 
 ## Interactive code graph
 
@@ -86,8 +146,10 @@ go install github.com/TrandomHL/AgentExecTrace@v0.1.0
 `go install` builds from source and identifies itself as `0.1.0`; use a release
 asset when you need the release-workflow build provenance.
 
-The installed executable is placed in Go's normal binary directory. Ensure
-that directory is on `PATH` if the command is not found.
+Go installs `AgentExecTrace.exe` on Windows and `AgentExecTrace` on Linux
+into its normal binary directory. Ensure that directory is on `PATH`. When
+using this installation, replace `./agentexectrace-linux-amd64` or
+`.\agentexectrace.exe` in examples with the installed command name.
 
 ## Upgrade and uninstall
 
@@ -100,7 +162,7 @@ binary or Go-installed executable; no service or configuration is created.
 
 | Command | Purpose |
 |---|---|
-| `snapshot [--output file]` | Emit OS/WSL evidence, CWD, path namespace, PATH and PATHEXT metadata. It never dumps environment values. |
+| `snapshot [--output file]` | Emit OS/WSL evidence, CWD, path namespace, PATH and PATHEXT metadata. It does not dump the full environment. |
 | `resolve [--output file] <name>` | Explain candidate existence and executability in PATH/PATHEXT order, including lightweight provenance. |
 | `probe [--max-bytes n] [--output file] [-- <command> [args...]]` | With no command, run a deterministic same-binary self-probe; otherwise capture the supplied argv, bounded stdout/stderr, UTF-8 status and exit result. |
 | `diff [--output file] <left.json> <right.json>` | Compare snapshot, resolve, or probe JSON with explicit semantic findings and priorities. |
@@ -113,7 +175,7 @@ binary or Go-installed executable; no service or configuration is created.
 .\agentexectrace.exe snapshot --output windows.json
 
 # Explain one executable, including PATH/PATHEXT order.
-.\agentexectrace.exe resolve git --output git.json
+.\agentexectrace.exe resolve --output git.json git
 
 # Exercise argv, UTF-8, stdout, stderr and a fixed exit code without a shell.
 .\agentexectrace.exe probe
@@ -121,8 +183,8 @@ binary or Go-installed executable; no service or configuration is created.
 # Keep custom process probing when needed.
 .\agentexectrace.exe probe -- cmd.exe /c "git --version"
 
-# Compare the same kind of JSON evidence from two contexts.
-.\agentexectrace.exe diff windows.json wsl.json
+# Compare the snapshots captured in the first-use workflow.
+.\agentexectrace.exe diff .\aet-evidence\terminal.json .\aet-evidence\agent.json
 
 # Prepare a shareable Markdown copy; inspect it before posting.
 .\agentexectrace.exe report --redact --output report.md windows.json

@@ -49,21 +49,24 @@ execution policy, or project files until the context difference is understood.
 
 ## Short diagnostic workflow
 
-Use the same binary and comparable commands in each context:
+Complete the [first-use comparison](README.md#the-smallest-useful-comparison)
+first; it creates separate terminal and agent snapshots in one shared evidence
+directory. Use an absolute executable path when comparing different working
+directories. The PowerShell examples below reuse `$tool` and `$evidence`
+from that workflow, so they also work outside the executable directory. For a
+native WSL agent, use the separate Linux workflow in the README.
+For additional Windows diagnostics:
 
 ```powershell
-# In each context
-.\agentexectrace.exe snapshot --output context.json
-
 # In the context where the command differs
-.\agentexectrace.exe resolve git --output resolve.json
-.\agentexectrace.exe probe -- git --version
+& $tool resolve --output resolve.json git
+& $tool probe -- git --version
 ```
 
-Then compare matching evidence files:
+Compare the snapshots using their actual paths in the shared evidence directory:
 
 ```powershell
-.\agentexectrace.exe diff terminal.json agent.json
+& $tool diff (Join-Path $evidence 'terminal.json') (Join-Path $evidence 'agent.json')
 ```
 
 Interpret differences in CWD, OS/WSL identity, path namespace, PATH/PATHEXT,
@@ -76,7 +79,7 @@ it only narrows the investigation.
 Before attaching or posting an artifact, create a redacted report:
 
 ```powershell
-.\agentexectrace.exe report --redact --output report.md context.json
+& $tool report --redact --output (Join-Path $evidence 'report.md') (Join-Path $evidence 'agent.json')
 ```
 
 Redaction is defense-in-depth, not a guarantee. Inspect the generated report

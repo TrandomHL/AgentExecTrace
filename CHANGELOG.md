@@ -5,6 +5,21 @@ and Semantic Versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Corrected `resolve --output file name` examples in the README and agent setup.
+- Made the first-use workflow create both snapshots, use stable executable paths
+  and filenames, compare them, and produce a separate redacted report.
+- Clarified release/source installation command names and snapshot privacy wording.
+
+### Added
+
+- Three executable controlled reproductions: CWD-dependent file access, Windows
+  PATHEXT lookup failure, and PATH precedence. Real CLI/process checks include
+  restoration controls, documentation-command regressions and the report workflow.
+- A reproducibility guide explaining the comparison with manual checks and the
+  limits of these synthetic examples; no adoption or performance claims.
+
 ## [0.1.0] - 2026-08-23
 
 ### Added

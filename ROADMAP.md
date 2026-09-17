@@ -21,6 +21,13 @@ of these implementation phases does not itself satisfy a release gate.
 - **Gate:** independent v0.1 Release Gate review after all required evidence is
   recorded. This phase does not self-declare release readiness.
 
+## First-use and controlled reproducibility (unreleased)
+
+- Repair the copyable first-use and agent instructions.
+- Add executable controlled experiments with process symptoms and restoration
+  checks; see `examples/README.md`. These support technical evaluation and do not
+  satisfy the organic adoption gate below.
+
 ## Phase 6 — Dogfood and external validation (after release)
 
 - Collect only organic, reproducible troubleshooting cases from supported
